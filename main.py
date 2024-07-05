@@ -219,3 +219,4 @@ combined_results = run_all_phases(takeoff_params, phase1_params, phase2_params, 
 # Print and plot results
 print_totals(combined_results)
 plot_results(combined_results)
+
