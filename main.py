@@ -57,7 +57,7 @@ takeoff_params = {
 
 take_off_C_params = {
     'initial_altitude': 0,  # in feet
-    'target_altitude': 0,  # in feet
+    'target_altitude': 50,  # in feet
     'initial_airspeed': 115,  # in knots
     'final_airspeed': 120,  # in knots
     'roc': 1300,  # rate of climb in feet per minute
@@ -143,7 +143,7 @@ phase3_params = {
     'usable_capacity_factor': usable_capacity_factor,
     'steady_state_motor_power_kW': steady_state_motor_power_kW,
     'max_power_kw': max_power_kw,
-    'idle_power_kw': idle_power_kw,
+    'idle_power_kw': idle_power_kw
 }
 
 # Parameters for the cruise phase
@@ -219,5 +219,3 @@ combined_results = run_all_phases(takeoff_params, phase1_params, phase2_params, 
 # Print and plot results
 print_totals(combined_results)
 plot_results(combined_results)
-
-print("hello")

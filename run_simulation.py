@@ -6,7 +6,7 @@ from simulations.descent_phase import simulate_descent_phase
 from simulations.approach_and_landing_phase import simulate_approach_and_landing
 from utils import simple_wind_speed_scenario, simple_crosswind_speed_scenario
 
-def run_all_phases(takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines=2):
+def run_all_phases(takeoff_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines=2):
     # Run the take-off phase
     results_takeoff, final_weight_takeoff, final_time_takeoff, final_horizontal_distance_takeoff, final_engine_power_takeoff, cumulative_fuel_consumed_takeoff, total_carbon_emissions_takeoff, total_co_emissions_takeoff, total_nox_emissions_takeoff, total_so2_emissions_takeoff = simulate_takeoff_phase(
         takeoff_params,
@@ -22,31 +22,10 @@ def run_all_phases(takeoff_params, take_off_C_params, phase1_params, phase2_para
         total_so2_emissions=0
     )
 
-    # Update initial conditions for the additional climb phase (take_off_C_params)
-    take_off_C_params['initial_weight'] = final_weight_takeoff / 9.81  # Convert N to kg
+    # Update initial conditions for the first climb phase based on the take-off phase
+    phase1_params['initial_weight'] = final_weight_takeoff / 9.81  # Convert N to kg
     initial_time = final_time_takeoff
     initial_horizontal_distance = final_horizontal_distance_takeoff
-
-    # Run the additional climb phase (take_off_C_params)
-    results_take_off_C, final_weight_take_off_C, final_time_take_off_C, final_horizontal_distance_take_off_C, final_engine_power_take_off_C, total_fuel_consumed_take_off_C, total_carbon_emissions_take_off_C, total_co_emissions_take_off_C, total_nox_emissions_take_off_C, total_so2_emissions_take_off_C = simulate_climb_phase(
-        take_off_C_params,
-        simple_wind_speed_scenario,
-        simple_crosswind_speed_scenario,
-        take_off_C_params['initial_weight'],
-        initial_time,
-        initial_horizontal_distance,
-        num_engines,
-        cumulative_fuel_consumed=cumulative_fuel_consumed_takeoff,
-        total_carbon_emissions=total_carbon_emissions_takeoff,
-        total_co_emissions=total_co_emissions_takeoff,
-        total_nox_emissions=total_nox_emissions_takeoff,
-        total_so2_emissions=total_so2_emissions_takeoff
-    )
-
-    # Update initial conditions for the first climb phase based on the additional climb phase
-    phase1_params['initial_weight'] = final_weight_take_off_C / 9.81  # Convert N to kg
-    initial_time = final_time_take_off_C
-    initial_horizontal_distance = final_horizontal_distance_take_off_C
 
     # Run the first phase of climb
     results_phase1, final_weight_phase1, final_time_phase1, final_horizontal_distance_phase1, final_engine_power_phase1, total_fuel_consumed_phase1, total_carbon_emissions_phase1, total_co_emissions_phase1, total_nox_emissions_phase1, total_so2_emissions_phase1 = simulate_climb_phase(
@@ -57,11 +36,11 @@ def run_all_phases(takeoff_params, take_off_C_params, phase1_params, phase2_para
         initial_time,
         initial_horizontal_distance,
         num_engines,
-        cumulative_fuel_consumed=total_fuel_consumed_take_off_C,
-        total_carbon_emissions=total_carbon_emissions_take_off_C,
-        total_co_emissions=total_co_emissions_take_off_C,
-        total_nox_emissions=total_nox_emissions_take_off_C,
-        total_so2_emissions=total_so2_emissions_take_off_C
+        cumulative_fuel_consumed=cumulative_fuel_consumed_takeoff,
+        total_carbon_emissions=total_carbon_emissions_takeoff,
+        total_co_emissions=total_co_emissions_takeoff,
+        total_nox_emissions=total_nox_emissions_takeoff,
+        total_so2_emissions=total_so2_emissions_takeoff
     )
 
     # Update initial conditions for the second climb phase based on the first climb phase
@@ -155,6 +134,6 @@ def run_all_phases(takeoff_params, take_off_C_params, phase1_params, phase2_para
     )
 
     # Combine the results of all phases
-    combined_results = pd.concat([results_takeoff, results_take_off_C, results_phase1, results_phase2, results_phase3, results_cruise, results_descent, results_approach_and_landing], ignore_index=True)
+    combined_results = pd.concat([results_takeoff, results_phase1, results_phase2, results_phase3, results_cruise, results_descent, results_approach_and_landing], ignore_index=True)
 
     return combined_results
