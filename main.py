@@ -220,3 +220,4 @@ combined_results = run_all_phases(takeoff_params, phase1_params, phase2_params, 
 print_totals(combined_results)
 plot_results(combined_results)
 
+print("hello")
