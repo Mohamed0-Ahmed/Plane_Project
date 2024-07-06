@@ -56,14 +56,14 @@ takeoff_params = {
 }
 
 take_off_C_params = {
-    'initial_altitude': 0,  # in feet
-    'target_altitude': 50,  # in feet
-    'initial_airspeed': 115,  # in knots
-    'final_airspeed': 120,  # in knots
-    'roc': 1300,  # rate of climb in feet per minute
+    'initial_altitude': 50,  # in feet
+    'target_altitude': 5000,  # in feet
+    'initial_airspeed': 120,  # in knots
+    'final_airspeed': 130,  # in knots
+    'roc': 1800,  # rate of climb in feet per minute
     'initial_weight': None,  # in kg, to be updated based on the end of takeoff phase
     'time_step': 1,  # in seconds
-    'C_D0': C_D,
+    'C_D0': C_D0,
     'k': k,
     'S': S,
     'num_motors': num_motors,
@@ -214,7 +214,7 @@ approach_and_landing_params = {
 }
 
 # Run the simulation for all phases
-combined_results = run_all_phases(takeoff_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines)
+combined_results = run_all_phases(takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines)
 
 # Print and plot results
 print_totals(combined_results)
