@@ -23,7 +23,7 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     C_L_AVG = params['C_L_AVG']  # average lift coefficient for takeoff roll
     mu = params['mu']  # example coefficient of friction
     propeller_efficiency = params['propeller_efficiency']  # propeller efficiency during takeoff
-
+    warm_up_duration = params['warmup_duration']
     isa = atmospheres.Atmosphere()
     rho = isa.airdens_kgpm3(initial_altitude)
     mass = initial_weight  # kg (example mass for Q200 Dash)
@@ -59,6 +59,9 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     distance = initial_horizontal_distance
     time = initial_time
 
+    time += warm_up_duration
+
+
     times = []
     altitudes = []
     distances = []
@@ -82,12 +85,14 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
 
     print(f"Starting warm-up phase with initial weight {initial_weight} kg")
 
-    # Warm-up phase
-    while time < params['warmup_duration']:
-        power_increase_rate = (max_power_kW - idle_power_kW) / params['warmup_duration']
-        engine_power_kW = idle_power_kW + power_increase_rate * time
-        engine_power_kW_per_engine = engine_power_kW / 2
+    warm_time = time
 
+    # Warm-up phase
+    while time < warm_time + params['warmup_duration']:
+        power_increase_rate = (max_power_kW - idle_power_kW) / params['warmup_duration']
+        engine_power_kW = idle_power_kW + power_increase_rate * (time - warm_time)
+        engine_power_kW_per_engine = engine_power_kW / 2
+        
         # Ensure the power is within the specified limits
         engine_power_kW_per_engine = np.clip(engine_power_kW_per_engine, idle_power_kW / 2, max_power_kW / 2)
 
