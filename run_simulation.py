@@ -345,6 +345,7 @@ from simulations.cruise_phase import simulate_cruise_phase
 from simulations.descent_phase import simulate_descent_phase
 from simulations.approach_and_landing_phase import simulate_approach_and_landing
 from simulations.engine_turn_on_phase import engine_turn_on_phase
+from prints_and_plots import plot_results, print_totals
 from utils import simple_wind_speed_scenario, simple_crosswind_speed_scenario
 
 def run_all_phases(engine_turn_on_params, takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines=2):
@@ -362,7 +363,7 @@ def run_all_phases(engine_turn_on_params, takeoff_params, take_off_C_params, pha
     )
 
     # Update initial conditions for the takeoff phase
-    takeoff_params['initial_weight'] = final_weight_turn_on / 9.81  # Convert N to kg
+    takeoff_params['initial_weight'] = final_weight_turn_on  # Convert N to kg
     initial_time = final_time_turn_on
     initial_horizontal_distance = final_horizontal_distance_turn_on
 
@@ -530,5 +531,9 @@ def run_all_phases(engine_turn_on_params, takeoff_params, take_off_C_params, pha
 
     # Combine the results of all phases
     combined_results = pd.concat([turn_on_results, results_takeoff, results_take_off_C, results_phase1, results_phase2, results_phase3, results_cruise, results_descent, results_approach_and_landing], ignore_index=True)
+    take_off_full_results = pd.concat([results_takeoff, results_take_off_C])
+    climb_full_results = pd.concat([results_phase1, results_phase2, results_phase3])
+
+    plot_results(take_off_full_results)
 
     return combined_results
