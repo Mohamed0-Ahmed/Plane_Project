@@ -45,6 +45,15 @@ engine_turn_on_params = {
     'initial_weight': mass  # kg
 }
 
+taxi_params = {
+    'taxi_duration': 300,  # taxi duration in seconds
+    'max_taxi_speed': 17.5,  # maximum taxi speed in knots
+    'acceleration_time': 30,  # time to accelerate to taxi speed in seconds
+    'deceleration_time': 30,  # time to decelerate from taxi speed in seconds
+    'idle_power_kw': idle_power_kw,
+    'time_step': time_step,
+    'initial_weight': mass,  # initial weight in kg
+}
 # Add parameters for the take-off phase
 takeoff_params = {
     'initial_altitude': 0,
@@ -66,8 +75,6 @@ takeoff_params = {
     'initial_weight': mass,  # kg
     'turn_on_duration': engine_turn_on_params['turn_on_duration']  # Include turn-on duration
 }
-
-# Define parameters for other phases...
 
 # Parameters for the additional climb phase
 take_off_C_params = {
@@ -229,7 +236,7 @@ approach_and_landing_params = {
 }
 
 # Run the simulation for all phases
-combined_results = run_all_phases(engine_turn_on_params, takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines)
+combined_results = run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines)
 # combined_results_take_off = run_all_phases(takeoff_params, take_off_C_params)
 # combined_results_climb = run_all_phases(phase1_params, phase2_params, phase3_params)
 
