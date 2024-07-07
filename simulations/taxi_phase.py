@@ -257,7 +257,8 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
     deceleration_time = params['deceleration_time']
     idle_power_kw = params['idle_power_kw']
     time_step = params['time_step']
-
+    initial_altitude = 0
+    altitudes = initial_altitude
     isa = atmospheres.Atmosphere()
     
     # Load the spline function if not provided
@@ -268,6 +269,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
 
     times = []
     distances = []
+    altitudes = []
     velocities = []
     accelerations = []
     powers = []
@@ -315,6 +317,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         total_so2_emissions += metrics['so2_emissions_kg_total']
 
         times.append(time)
+        altitudes.append(0)
         distances.append(distance)
         velocities.append(velocity)
         accelerations.append(acceleration)
@@ -353,6 +356,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         distances.append(distance)
         velocities.append(velocity)
         accelerations.append(0)
+        altitudes.append(0)
         powers.append(power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
         cumulative_fuel_consumptions.append(cumulative_fuel_consumed)
@@ -388,6 +392,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         times.append(time)
         distances.append(distance)
         velocities.append(max(velocity, 0))
+        altitudes.append(0)
         accelerations.append(-deceleration)
         powers.append(power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
@@ -420,6 +425,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         'Cumulative NOx Emissions (kg)': cumulative_nox_emissions,
         'SO2 Emissions (kg)': so2_emissions,
         'Cumulative SO2 Emissions (kg)': cumulative_so2_emissions,
+        'Altitude (m)': altitudes,
         'Weight (N)': weights
     })
 

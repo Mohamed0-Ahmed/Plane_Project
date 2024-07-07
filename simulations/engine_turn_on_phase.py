@@ -16,8 +16,11 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
     time_step = params['time_step']
     turn_on_duration = params['turn_on_duration']  # Turn-on duration in seconds
     initial_weight = params['initial_weight']
-    
+    initial_altitude = 0  # Start from ground level altitude
+    altitudes = initial_altitude
+
     times = []
+    altitudes = []
     distances = []
     velocities = []
     total_powers = []
@@ -43,7 +46,8 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
         distances.append(initial_horizontal_distance)
         velocities.append(0)
         total_powers.append(power * 1000)  # Convert kW to W
-
+        altitudes.append(0)
+        
         # Calculate metrics for engines
         metrics_engine = calculate_metrics(power / 2, time_step, loaded_spline, num_engines=num_engines) 
         current_fuel_consumed = metrics_engine['fuel_consumed_kg_total']
@@ -60,6 +64,7 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
     results = pd.DataFrame({
         'Time (s)': times,
         'Distance (m)': distances,
+        'Altitude (m)': altitudes,
         'Velocity (m/s)': velocities,
         'Total Power (W)': total_powers,
         'Fuel Consumption (kg)': fuel_consumptions,
