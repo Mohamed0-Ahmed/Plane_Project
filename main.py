@@ -34,13 +34,13 @@ steady_state_motor_power_kW = 150  # Steady state motor power per motor
 num_motors = 2  # Number of electric motors
 num_engines = 2  # Number of engines
 
-# Add parameters for the engine turn on phase
-turn_on_params = {
-    'idle_power_kw': idle_power_kw,  # Idle power in kW
-    'time_step': 0.1,  # Time step in seconds
-    'turn_on_duration': 15,  # Turn-on duration in seconds
-    'initial_weight': mass,  # Initial weight in kg
-}
+# # Add parameters for the engine turn on phase
+# turn_on_params = {
+#     'idle_power_kw': idle_power_kw,  # Idle power in kW
+#     'time_step': 0.1,  # Time step in seconds
+#     'turn_on_duration': 15,  # Turn-on duration in seconds
+#     'initial_weight': mass,  # Initial weight in kg
+# }
 
 # Add parameters for the take-off phase
 takeoff_params = {
@@ -60,7 +60,7 @@ takeoff_params = {
     'final_angle': final_angle,
     'time_step': time_step,
     'warmup_duration': warmup_duration,
-    'initial_weight': None  # kg
+    'initial_weight': mass  # kg
 }
 
 take_off_C_params = {
@@ -222,7 +222,7 @@ approach_and_landing_params = {
 }
 
 # Run the simulation for all phases
-combined_results = run_all_phases(turn_on_params, takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines)
+combined_results = run_all_phases(takeoff_params, take_off_C_params, phase1_params, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, num_engines)
 
 # Print and plot results
 print_totals(combined_results)
