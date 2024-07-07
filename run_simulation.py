@@ -21,6 +21,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
         total_nox_emissions_turn_on=0,
         total_so2_emissions_turn_on=0
     )
+    print(f"After Turn-On Phase: Cumulative Fuel = {cumulative_fuel_consumed_turn_on}")
 
     # Update initial conditions for the taxi phase
     taxi_params['initial_weight'] = final_weight_turn_on  # Convert N to kg
@@ -40,6 +41,8 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
         total_nox_emissions=total_nox_emissions_turn_on,
         total_so2_emissions=total_so2_emissions_turn_on
     )
+
+    print(f"After Takeoff Phase: Cumulative Fuel = {cumulative_fuel_consumed_taxi}")
 
     # Update initial conditions for the takeoff phase
     takeoff_params['initial_weight'] = final_weight_taxi/9.81  # Convert N to kg
@@ -207,6 +210,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
         total_nox_emissions=total_nox_emissions_descent,
         total_so2_emissions=total_so2_emissions_descent
     )
+    print(f"After Approach and Landing Phase: Cumulative Fuel = {cumulative_fuel_consumed_landing}")
 
     taxi_params2['initial_weight'] = final_weight_landing / 9.81  # Convert N to kg
     initial_time = final_time_landing
@@ -218,7 +222,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
         taxi_params2,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
-        taxi_params['initial_weight'],
+        taxi_params2['initial_weight'],
         initial_time,
         initial_horizontal_distance,
         cumulative_fuel_consumed=cumulative_fuel_consumed_landing,
@@ -227,6 +231,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
         total_nox_emissions=total_nox_emissions_landing,
         total_so2_emissions=total_so2_emissions_landing
     )
+    print(f"After Second Taxi Phase: Cumulative Fuel = {cumulative_fuel_consumed_taxi2}")
 
 
     # Combine the results of all phases
