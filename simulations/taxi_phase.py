@@ -505,7 +505,8 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
     initial_altitude = 0
     
     isa = atmospheres.Atmosphere()
-    
+    pressure = isa.airpress_pa(0)
+
     # Load the spline function if not provided
     script_dir = os.path.dirname(__file__)
     spline_function_path = os.path.join(script_dir, 'spline_function.pkl')
@@ -529,6 +530,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
     so2_emissions = []
     cumulative_so2_emissions = []
     weights = []
+    pressures = []
 
     time = initial_time
     distance = initial_horizontal_distance
@@ -563,6 +565,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         distances.append(distance)
         velocities.append(velocity)
         accelerations.append(acceleration)
+        pressures.append(pressure)
         powers.append(2*power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
         cumulative_fuel_consumptions.append(cumulative_fuel_consumed)
@@ -599,6 +602,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         velocities.append(velocity)
         accelerations.append(0)
         altitudes.append(0)
+        pressures.append(pressure)
         powers.append(2*power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
         cumulative_fuel_consumptions.append(cumulative_fuel_consumed)
@@ -635,6 +639,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         distances.append(distance)
         velocities.append(max(velocity, 0))
         altitudes.append(0)
+        pressures.append(pressure)
         accelerations.append(-deceleration)
         powers.append(2*power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
@@ -668,7 +673,9 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         'SO2 Emissions (kg)': so2_emissions,
         'Cumulative SO2 Emissions (kg)': cumulative_so2_emissions,
         'Altitude (m)': altitudes,
-        'Weight (N)': weights
+        'Weight (N)': weights,
+        'True Airspeed (m/s)': velocities,
+        'Groundspeed (m/s)': velocities
     })
 
     print(f"End Taxi Phase: Final Cumulative Fuel = {cumulative_fuel_consumed}")

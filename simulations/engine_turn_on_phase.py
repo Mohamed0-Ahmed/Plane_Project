@@ -18,6 +18,8 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
     initial_weight = params['initial_weight']
     initial_altitude = 0  # Start from ground level altitude
     altitudes = initial_altitude
+    isa = atmospheres.Atmosphere()
+    pressure = isa.airpress_pa(0)
 
     times = []
     altitudes = []
@@ -31,6 +33,9 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
     total_nox_emissions = total_nox_emissions_turn_on
     total_so2_emissions = total_so2_emissions_turn_on
     dynamic_weights = []
+    pressures = []
+    true_airspeeds = []
+    groundspeeds = []
 
     # Determine the directory of this script
     script_dir = os.path.dirname(__file__)
@@ -47,7 +52,9 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
         velocities.append(0)
         total_powers.append(power * 1000)  # Convert kW to W
         altitudes.append(0)
-        
+        pressures.append(pressure)
+        true_airspeeds.append(0)
+        groundspeeds.append(0)
         # Calculate metrics for engines
         metrics_engine = calculate_metrics(power / 2, time_step, loaded_spline, num_engines=num_engines) 
         current_fuel_consumed = metrics_engine['fuel_consumed_kg_total']
@@ -72,7 +79,10 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
         'Carbon Emissions (kg)': total_carbon_emissions,
         'CO Emissions (kg)': total_co_emissions,
         'NOx Emissions (kg)': total_nox_emissions,
-        'SO2 Emissions (kg)': total_so2_emissions
+        'SO2 Emissions (kg)': total_so2_emissions,
+        'Pressure (Pa)': pressures,
+        'True Airspeed (m/s)': true_airspeeds,
+        'Groundspeed (m/s)': groundspeeds
     })
 
     # Plot results for checking
@@ -114,3 +124,4 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
     plt.show()
 
     return results, dynamic_weights[-1], time + initial_time, distances[-1], idle_power_kW * 1000, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions
+
