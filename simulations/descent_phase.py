@@ -8,7 +8,7 @@ import pickle
 # Adjust the Python path to include the root directory of your project
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from utils import calculate_fuel_consumption, calculate_emissions, calculate_metrics, calculate_drag_coefficient, calculate_lift_coefficient_descent
+from utils import calculate_fuel_consumption, calculate_emissions, calculate_metrics, calculate_drag_coefficient, calculate_lift_coefficient_descent, enforce_power_limits
 
 def simulate_descent_phase(params, wind_speed_scenario, crosswind_speed_scenario, initial_weight, initial_time, initial_horizontal_distance, previous_engine_power=None, cumulative_fuel_consumed=0, total_carbon_emissions=0, total_co_emissions=0, total_nox_emissions=0, total_so2_emissions=0):
     initial_altitude = params['initial_altitude'] * 0.3048  # feet to meters
@@ -16,7 +16,6 @@ def simulate_descent_phase(params, wind_speed_scenario, crosswind_speed_scenario
     airspeed = params['airspeed'] * 0.51444  # knots to m/s
     rate_of_descent = params['rate_of_descent'] * 0.00508  # feet per minute to m/s
     initial_weight = initial_weight * 9.81  # kg to N
-
     num_motors = params['num_motors']
     num_engines = params['num_engines']
     gearbox_efficiency = params['gearbox_efficiency']
@@ -24,6 +23,8 @@ def simulate_descent_phase(params, wind_speed_scenario, crosswind_speed_scenario
     battery_capacity_kWh = params['battery_capacity_kWh']
     usable_capacity_factor = params['usable_capacity_factor']
     steady_state_motor_power_kW = params['steady_state_motor_power_kW']
+    max_power_kw = params['max_power_kw']
+    idle_power_kw = params['idle_power_kw']
 
     C_D0 = params['C_D0']
     k = params['k']
@@ -96,7 +97,7 @@ def simulate_descent_phase(params, wind_speed_scenario, crosswind_speed_scenario
 
         # Correct total power calculation based on provided formula
         total_power = power_drag - (weight * rate_of_descent)
-
+        total_power = enforce_power_limits(total_power, max_power_kw, idle_power_kw, num_engines)
         # Ensure engine_power is not negative
         engine_power = max(total_power, 0)
 
