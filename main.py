@@ -334,7 +334,7 @@ time_step = 0.1  # time step for simulation
 
 # Hybrid system parameters
 gearbox_efficiency = 0.99
-inverter_efficiency = 0.9
+inverter_efficiency = 0.93
 battery_capacity_kWh = 5  # Total capacity of one battery in kWh
 usable_capacity_factor = 0.8  # 80% of the battery can be used
 steady_state_motor_power_kW = 150  # Steady state motor power per motor

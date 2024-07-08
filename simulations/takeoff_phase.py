@@ -521,9 +521,12 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     # Load the spline functions
     script_dir = os.path.dirname(__file__)
     spline_function_path = os.path.join(script_dir, 'spline_function.pkl')
+
     with open(spline_function_path, 'rb') as f:
         loaded_spline = pickle.load(f)
-
+    with open('motor_efficiency_interpolation.pkl', 'rb') as file:
+        motor_efficiency_spline = pickle.load(file)
+        
     altitude = initial_altitude  # Start from ground level altitude
     velocity = 0
     distance = initial_horizontal_distance
