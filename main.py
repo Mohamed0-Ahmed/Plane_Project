@@ -437,7 +437,7 @@ between_1_2_climb = {
     'final_airspeed': 130,  # in knots
     'initial_roc': 1800,  # initial rate of climb in feet per minute
     'final_roc': 1500,  # final rate of climb in feet per minute
-    'roc_transition_duration': 60,  # duration for ROC transition in seconds
+    'roc_transition_duration': 30,  # duration for ROC transition in seconds
     'initial_weight': None,  # to be updated based on the end of phase 1
     'time_step': 1,  # in seconds
     'C_D0': C_D0,
@@ -476,33 +476,33 @@ phase2_params = {
     'max_power_kw': max_power_kw,
     'idle_power_kw': idle_power_kw
 }
-# # Parameters for the new climb phase between phase1 and phase2
-# between_2_3_climb = {
-#     'initial_altitude': 15000,  # in feet (starting from the end of phase 1)
-#     'initial_airspeed': 130,  # in knots (starting from the end of phase 1)
-#     'final_airspeed': 130,  # in knots
-#     'initial_roc': 1800,  # initial rate of climb in feet per minute
-#     'final_roc': 1500,  # final rate of climb in feet per minute
-#     'roc_transition_duration': 180,  # duration for ROC transition in seconds
-#     'initial_weight': None,  # to be updated based on the end of phase 1
-#     'time_step': 1,  # in seconds
-#     'C_D0': C_D0,
-#     'k': k,
-#     'S': S,
-#     'num_motors': num_motors,
-#     'num_engines': num_engines,
-#     'gearbox_efficiency': gearbox_efficiency,
-#     'inverter_efficiency': inverter_efficiency,
-#     'battery_capacity_kWh': battery_capacity_kWh,
-#     'usable_capacity_factor': usable_capacity_factor,
-#     'steady_state_motor_power_kW': steady_state_motor_power_kW,
-#     'max_power_kw': max_power_kw,
-#     'idle_power_kw': idle_power_kw
-# }
+between_2_3_climb = {
+    'initial_altitude': 15000,  # in feet (starting from the end of phase 1)
+    'initial_airspeed': 200,  # in knots (starting from the end of phase 1)
+    'final_airspeed': 200,  # in knots
+    'initial_roc': 1500,  # initial rate of climb in feet per minute
+    'final_roc': 1000,  # final rate of climb in feet per minute
+    'roc_transition_duration': 30,  # duration for ROC transition in seconds
+    'initial_weight': None,  # to be updated based on the end of phase 1
+    'time_step': 1,  # in seconds
+    'C_D0': C_D0,
+    'k': k,
+    'S': S,
+    'num_motors': num_motors,
+    'num_engines': num_engines,
+    'gearbox_efficiency': gearbox_efficiency,
+    'inverter_efficiency': inverter_efficiency,
+    'battery_capacity_kWh': battery_capacity_kWh,
+    'usable_capacity_factor': usable_capacity_factor,
+    'steady_state_motor_power_kW': steady_state_motor_power_kW,
+    'max_power_kw': max_power_kw,
+    'idle_power_kw': idle_power_kw
+
+}
 
 # Parameters for the third phase of climb
 phase3_params = {
-    'initial_altitude': 15000,  # in feet (starting from the end of phase 2)
+    'initial_altitude': None,  # in feet (starting from the end of phase 2)
     'target_altitude': 24000,  # in feet
     'initial_airspeed': 200,  # in knots (starting from the end of phase 2)
     'final_airspeed': 200,  # in knots
@@ -601,7 +601,7 @@ taxi_params2 = {
 }
 
 # Run the simulation for all phases
-combined_results = run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, phase1_params, between_1_2_climb, phase2_params, phase3_params, cruise_params, descent_params, approach_and_landing_params, taxi_params2, num_engines)
+combined_results = run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, phase1_params, between_1_2_climb, phase2_params,between_2_3_climb, phase3_params, cruise_params, descent_params, approach_and_landing_params, taxi_params2, num_engines)
 
 # Print and plot results
 print_totals(combined_results)
