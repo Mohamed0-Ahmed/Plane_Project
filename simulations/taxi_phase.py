@@ -563,7 +563,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         distances.append(distance)
         velocities.append(velocity)
         accelerations.append(acceleration)
-        powers.append(power_kw * 1000)  # Convert kW to W
+        powers.append(2*power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
         cumulative_fuel_consumptions.append(cumulative_fuel_consumed)
         carbon_emissions.append(metrics['carbon_emissions_kg_total'])
@@ -599,7 +599,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         velocities.append(velocity)
         accelerations.append(0)
         altitudes.append(0)
-        powers.append(power_kw * 1000)  # Convert kW to W
+        powers.append(2*power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
         cumulative_fuel_consumptions.append(cumulative_fuel_consumed)
         carbon_emissions.append(metrics['carbon_emissions_kg_total'])
@@ -636,7 +636,7 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         velocities.append(max(velocity, 0))
         altitudes.append(0)
         accelerations.append(-deceleration)
-        powers.append(power_kw * 1000)  # Convert kW to W
+        powers.append(2*power_kw * 1000)  # Convert kW to W
         fuel_consumptions.append(current_fuel_consumed)
         cumulative_fuel_consumptions.append(cumulative_fuel_consumed)
         carbon_emissions.append(metrics['carbon_emissions_kg_total'])
