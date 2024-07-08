@@ -15,7 +15,7 @@ def simulate_climb_phase_int(params, wind_speed_scenario, crosswind_speed_scenar
     def roc_scenario(time, initial_roc, final_roc, total_climb_time):
         if initial_roc == final_roc:
             return initial_roc * 0.00508  # Convert to m/s directly
-        climb_progress = min(time / total_climb_time, 1)
+        climb_progress = min((time - initial_time) / total_climb_time, 1)
         roc = initial_roc + climb_progress * (final_roc - initial_roc)
         return roc * 0.00508  # Convert to m/s
 
@@ -82,7 +82,7 @@ def simulate_climb_phase_int(params, wind_speed_scenario, crosswind_speed_scenar
         roc = roc_scenario(time, initial_roc, final_roc, total_climb_time)
 
         altitude += roc * time_step
-        airspeed = initial_airspeed + (final_airspeed - initial_airspeed) * ((altitude - initial_altitude) / (altitude - initial_altitude + 1e-6))  # Avoid division by zero
+        airspeed = initial_airspeed + (final_airspeed - initial_airspeed) * ((time - initial_time) / total_climb_time)
         true_airspeed = airspeed
         ground_speed = np.sqrt((true_airspeed + wind_speed)**2 + crosswind_speed**2)
         heading = np.arctan2(crosswind_speed, true_airspeed + wind_speed)
@@ -212,12 +212,12 @@ def simulate_climb_phase_int(params, wind_speed_scenario, crosswind_speed_scenar
     plt.legend()
     plt.grid(True)
 
-    # Plot cumulative carbon emissions vs. time
+    # Plot total power vs. time
     plt.subplot(2, 2, 4)
-    plt.plot(results['Time (s)'], results['Cumulative Carbon Emissions (kg)'], label='Cumulative Carbon Emissions (kg)', color='m')
+    plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power (W)', color='m')
     plt.xlabel('Time (s)')
-    plt.ylabel('Cumulative Carbon Emissions (kg)')
-    plt.title('Cumulative Carbon Emissions over Time')
+    plt.ylabel('Total Power (W)')
+    plt.title('Total Power over Time')
     plt.legend()
     plt.grid(True)
 
@@ -225,4 +225,3 @@ def simulate_climb_phase_int(params, wind_speed_scenario, crosswind_speed_scenar
     plt.show()
 
     return results, weight, time, horizontal_distance, total_power, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions, altitude  # Include final altitude
-

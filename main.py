@@ -437,7 +437,7 @@ between_1_2_climb = {
     'final_airspeed': 130,  # in knots
     'initial_roc': 1800,  # initial rate of climb in feet per minute
     'final_roc': 1500,  # final rate of climb in feet per minute
-    'roc_transition_duration': 100,  # duration for ROC transition in seconds
+    'roc_transition_duration': 60,  # duration for ROC transition in seconds
     'initial_weight': None,  # to be updated based on the end of phase 1
     'time_step': 1,  # in seconds
     'C_D0': C_D0,
