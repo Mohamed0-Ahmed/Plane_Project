@@ -675,7 +675,8 @@ def simulate_taxi_phase(params, wind_speed_scenario, crosswind_speed_scenario, i
         'Altitude (m)': altitudes,
         'Weight (N)': weights,
         'True Airspeed (m/s)': velocities,
-        'Groundspeed (m/s)': velocities
+        'Groundspeed (m/s)': velocities,
+        'Total Power (W)': powers
     })
 
     print(f"End Taxi Phase: Final Cumulative Fuel = {cumulative_fuel_consumed}")
