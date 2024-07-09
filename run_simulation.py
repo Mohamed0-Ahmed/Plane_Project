@@ -54,7 +54,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_taxi
 
     # Run the take-off phase
-    results_takeoff, final_weight_takeoff, final_time_takeoff, final_horizontal_distance_takeoff, final_engine_power_takeoff, cumulative_battery_energy_consumed, cumulative_fuel_consumed_takeoff, total_carbon_emissions_takeoff, total_co_emissions_takeoff, total_nox_emissions_takeoff, total_so2_emissions_takeoff, required_batteries_takeoff = simulate_takeoff_phase(
+    results_takeoff, final_weight_takeoff, final_time_takeoff, final_horizontal_distance_takeoff, final_engine_power_takeoff, cumulative_battery_energy_consumed_takeoff, cumulative_fuel_consumed_takeoff, total_carbon_emissions_takeoff, total_co_emissions_takeoff, total_nox_emissions_takeoff, total_so2_emissions_takeoff, required_batteries_takeoff = simulate_takeoff_phase(
         takeoff_params,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
@@ -77,7 +77,8 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     print(f"battery count after take-off{required_batteries_takeoff}")
 
     # Run the additional climb phase (take_off_C_params)
-    results_take_off_C, final_weight_take_off_C, final_time_take_off_C, final_horizontal_distance_take_off_C, final_engine_power_take_off_C, cumulative_fuel_consumed_take_off_C, total_carbon_emissions_take_off_C, total_co_emissions_take_off_C, total_nox_emissions_take_off_C, total_so2_emissions_take_off_C = simulate_climb_phase(
+    #results_takeoff, final_weight_takeoff, final_time_takeoff, final_horizontal_distance_takeoff, final_engine_power_takeoff, cumulative_battery_energy_consumed_takeoff, cumulative_fuel_consumed_takeoff, total_carbon_emissions_takeoff, total_co_emissions_takeoff, total_nox_emissions_takeoff, total_so2_emissions_takeoff, required_batteries_takeoff
+    results_take_off_C, final_weight_take_off_C, final_time_take_off_C, final_horizontal_distance_take_off_C, final_engine_power_take_off_C, cumulative_battery_energy_consumed_takeoff_C, cumulative_fuel_consumed_take_off_C, total_carbon_emissions_take_off_C, total_co_emissions_take_off_C, total_nox_emissions_take_off_C, total_so2_emissions_take_off_C, required_batteries_takeoff_C= simulate_climb_phase(
         take_off_C_params,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
@@ -98,7 +99,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_take_off_C
 
     # Run the first phase of climb
-    results_phase1, final_weight_phase1, final_time_phase1, final_horizontal_distance_phase1, final_engine_power_phase1, cumulative_fuel_consumed_phase1, total_carbon_emissions_phase1, total_co_emissions_phase1, total_nox_emissions_phase1, total_so2_emissions_phase1 = simulate_climb_phase(
+    results_phase1, final_weight_phase1, final_time_phase1, final_horizontal_distance_phase1, final_engine_power_phase1, cumulative_battery_energy_consumed_takeoff_C, cumulative_fuel_consumed_phase1, total_carbon_emissions_phase1, total_co_emissions_phase1, total_nox_emissions_phase1, total_so2_emissions_phase1, required_batteries_phase1 = simulate_climb_phase(
         phase1_params,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
@@ -119,7 +120,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_phase1
 
     # Run the interpolated climb phase between the first and second climb phases
-    results_between_1_2_climb, final_weight_between_1_2_climb, final_time_between_1_2_climb, final_horizontal_distance_between_1_2_climb, final_engine_power_between_1_2_climb, cumulative_fuel_consumed_between_1_2_climb, total_carbon_emissions_between_1_2_climb, total_co_emissions_between_1_2_climb, total_nox_emissions_between_1_2_climb, total_so2_emissions_between_1_2_climb, final_altitude_between_1_2_climb = simulate_climb_phase_int(
+    results_between_1_2_climb, final_weight_between_1_2_climb, final_time_between_1_2_climb, final_horizontal_distance_between_1_2_climb, final_engine_power_between_1_2_climb, cumulative_battery_energy_consumed_1_2_climb, cumulative_fuel_consumed_between_1_2_climb, total_carbon_emissions_between_1_2_climb, total_co_emissions_between_1_2_climb, total_nox_emissions_between_1_2_climb, total_so2_emissions_between_1_2_climb, final_altitude_between_1_2_climb, required_batteries_1_2_climb = simulate_climb_phase_int(
         between_1_2_climb,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
@@ -144,7 +145,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_between_1_2_climb
 
     # Run the second phase of climb
-    results_phase2, final_weight_phase2, final_time_phase2, final_horizontal_distance_phase2, final_engine_power_phase2, cumulative_fuel_consumed_phase2, total_carbon_emissions_phase2, total_co_emissions_phase2, total_nox_emissions_phase2, total_so2_emissions_phase2 = simulate_climb_phase(
+    results_phase2, final_weight_phase2, final_time_phase2, final_horizontal_distance_phase2, final_engine_power_phase2,cumulative_battery_energy_consumed_takeoff_C, cumulative_fuel_consumed_phase2, total_carbon_emissions_phase2, total_co_emissions_phase2, total_nox_emissions_phase2, total_so2_emissions_phase2, required_batteries_takeoff_C = simulate_climb_phase(
         phase2_params,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
@@ -165,7 +166,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_phase2
 
     # Run the interpolation phase between the second and third climb phases
-    results_between_2_3_climb, final_weight_between_2_3_climb, final_time_between_2_3_climb, final_horizontal_distance_between_2_3_climb, final_engine_power_between_2_3_climb, cumulative_fuel_consumed_between_2_3_climb, total_carbon_emissions_between_2_3_climb, total_co_emissions_between_2_3_climb, total_nox_emissions_between_2_3_climb, total_so2_emissions_between_2_3_climb, final_altitude_between_2_3_climb = simulate_climb_phase_int(
+    results_between_2_3_climb, final_weight_between_2_3_climb, final_time_between_2_3_climb, final_horizontal_distance_between_2_3_climb, final_engine_power_between_2_3_climb, cumulative_battery_energy_consumed_2_3_climb, cumulative_fuel_consumed_between_2_3_climb, total_carbon_emissions_between_2_3_climb, total_co_emissions_between_2_3_climb, total_nox_emissions_between_2_3_climb, total_so2_emissions_between_2_3_climb, final_altitude_between_2_3_climb, required_batteries_2_3_climb = simulate_climb_phase_int(
         between_2_3_climb,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
@@ -190,7 +191,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_between_2_3_climb
 
     # Run the third phase of climb
-    results_phase3, final_weight_phase3, final_time_phase3, final_horizontal_distance_phase3, final_engine_power_phase3, cumulative_fuel_consumed_phase3, total_carbon_emissions_phase3, total_co_emissions_phase3, total_nox_emissions_phase3, total_so2_emissions_phase3 = simulate_climb_phase(
+    results_phase3, final_weight_phase3, final_time_phase3, final_horizontal_distance_phase3, final_engine_power_phase3, cumulative_battery_energy_consumed_takeoff_C, cumulative_fuel_consumed_phase3, total_carbon_emissions_phase3, total_co_emissions_phase3, total_nox_emissions_phase3, total_so2_emissions_phase3, required_batteries_takeoff_C = simulate_climb_phase(
         phase3_params,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,

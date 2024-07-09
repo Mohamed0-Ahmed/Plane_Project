@@ -356,7 +356,9 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     initial_angle = params['initial_angle']  # degrees
     final_angle = params['final_angle']  # degrees
     degree_of_hybridization = params['DOH']
-    max_motor_power_kW = params['max_motor_power_kW']
+    #max_motor_power_kW = params['max_motor_power_kW']
+    max_motor_power_kW = 250
+
     usable_battery_capacity_kWh = params['battery_capacity_kWh'] * params['usable_capacity_factor']
 
     # Static thrust calculation
@@ -575,69 +577,69 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
         'Weight (N)': weights
     })
 
-    print("Completed takeoff roll phase. Here are some sample results:")
-    print(results.head())
+    # print("Completed takeoff roll phase. Here are some sample results:")
+    # print(results.head())
 
-    # Plot results for checking
-    plt.figure(figsize=(14, 8))
+    # # Plot results for checking
+    # plt.figure(figsize=(14, 8))
 
-    plt.subplot(2, 2, 1)
-    plt.plot(results['Time (s)'], results['True Airspeed (m/s)'], label='True Airspeed')
-    plt.xlabel('Time (s)')
-    plt.ylabel('True Airspeed (m/s)')
-    plt.title('True Airspeed over Time')
-    plt.legend()
-    plt.grid(True)
+    # plt.subplot(2, 2, 1)
+    # plt.plot(results['Time (s)'], results['True Airspeed (m/s)'], label='True Airspeed')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('True Airspeed (m/s)')
+    # plt.title('True Airspeed over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.subplot(2, 2, 2)
-    plt.plot(results['Time (s)'], results['Distance (m)'], label='Distance', color='orange')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Distance (m)')
-    plt.title('Distance over Time')
-    plt.legend()
-    plt.grid(True)
+    # plt.subplot(2, 2, 2)
+    # plt.plot(results['Time (s)'], results['Distance (m)'], label='Distance', color='orange')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Distance (m)')
+    # plt.title('Distance over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.subplot(2, 2, 3)
-    plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power', color='green')
-    plt.plot(results['Time (s)'], results['Engine Power (W)'], label='Engine Power', color='blue')
-    plt.plot(results['Time (s)'], results['Motor Power (W)'], label='Motor Power', color='purple')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Power (W)')
-    plt.title('Power over Time')
-    plt.legend()
-    plt.grid(True)
+    # plt.subplot(2, 2, 3)
+    # plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power', color='green')
+    # plt.plot(results['Time (s)'], results['Engine Power (W)'], label='Engine Power', color='blue')
+    # plt.plot(results['Time (s)'], results['Motor Power (W)'], label='Motor Power', color='purple')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Power (W)')
+    # plt.title('Power over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.subplot(2, 2, 4)
-    plt.plot(results['Time (s)'], results['Cumulative Fuel Consumption (kg)'], label='Cumulative Fuel Consumption', color='red')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Cumulative Fuel Consumption (kg)')
-    plt.title('Cumulative Fuel Consumption over Time')
-    plt.legend()
-    plt.grid(True)
+    # plt.subplot(2, 2, 4)
+    # plt.plot(results['Time (s)'], results['Cumulative Fuel Consumption (kg)'], label='Cumulative Fuel Consumption', color='red')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Cumulative Fuel Consumption (kg)')
+    # plt.title('Cumulative Fuel Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
 
-    plt.figure(figsize=(14, 6))
+    # plt.figure(figsize=(14, 6))
 
-    plt.subplot(1, 2, 1)
-    plt.plot(results['Time (s)'], results['Battery Energy Consumption (kWh)'], label='Battery Energy Consumption', color='purple')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Battery Energy Consumption (kWh)')
-    plt.title('Battery Energy Consumption over Time')
-    plt.legend()
-    plt.grid(True)
+    # plt.subplot(1, 2, 1)
+    # plt.plot(results['Time (s)'], results['Battery Energy Consumption (kWh)'], label='Battery Energy Consumption', color='purple')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Battery Energy Consumption (kWh)')
+    # plt.title('Battery Energy Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.subplot(1, 2, 2)
-    plt.plot(results['Time (s)'], results['Cumulative Battery Energy Consumption (kWh)'], label='Cumulative Battery Energy Consumption', color='brown')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Cumulative Battery Energy Consumption (kWh)')
-    plt.title('Cumulative Battery Energy Consumption over Time')
-    plt.legend()
-    plt.grid(True)
+    # plt.subplot(1, 2, 2)
+    # plt.plot(results['Time (s)'], results['Cumulative Battery Energy Consumption (kWh)'], label='Cumulative Battery Energy Consumption', color='brown')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Cumulative Battery Energy Consumption (kWh)')
+    # plt.title('Cumulative Battery Energy Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
 
     return results, weights[-1], time, distance, cumulative_battery_energy_consumed, total_powers, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions, required_batteries
 
