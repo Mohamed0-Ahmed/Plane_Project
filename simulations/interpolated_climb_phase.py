@@ -182,46 +182,46 @@ def simulate_climb_phase_int(params, wind_speed_scenario, crosswind_speed_scenar
         'Cumulative SO2 Emissions (kg)': cumulative_so2_emissions
     })
 
-    # Plotting the interpolated climb phase
-    plt.figure(figsize=(14, 8))
+    # # Plotting the interpolated climb phase
+    # plt.figure(figsize=(14, 8))
 
-    # Plot altitude vs. time
-    plt.subplot(2, 2, 1)
-    plt.plot(results['Time (s)'], results['Altitude (m)'], label='Altitude (m)', color='b')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Altitude (m)')
-    plt.title('Altitude over Time')
-    plt.legend()
-    plt.grid(True)
+    # # Plot altitude vs. time
+    # plt.subplot(2, 2, 1)
+    # plt.plot(results['Time (s)'], results['Altitude (m)'], label='Altitude (m)', color='b')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Altitude (m)')
+    # plt.title('Altitude over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    # Plot airspeed vs. time
-    plt.subplot(2, 2, 2)
-    plt.plot(results['Time (s)'], results['Airspeed (m/s)'], label='Airspeed (m/s)', color='g')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Airspeed (m/s)')
-    plt.title('Airspeed over Time')
-    plt.legend()
-    plt.grid(True)
+    # # Plot airspeed vs. time
+    # plt.subplot(2, 2, 2)
+    # plt.plot(results['Time (s)'], results['Airspeed (m/s)'], label='Airspeed (m/s)', color='g')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Airspeed (m/s)')
+    # plt.title('Airspeed over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    # Plot cumulative fuel consumption vs. time
-    plt.subplot(2, 2, 3)
-    plt.plot(results['Time (s)'], results['Cumulative Fuel Consumption (kg)'], label='Cumulative Fuel Consumption (kg)', color='r')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Cumulative Fuel Consumption (kg)')
-    plt.title('Cumulative Fuel Consumption over Time')
-    plt.legend()
-    plt.grid(True)
+    # # Plot cumulative fuel consumption vs. time
+    # plt.subplot(2, 2, 3)
+    # plt.plot(results['Time (s)'], results['Cumulative Fuel Consumption (kg)'], label='Cumulative Fuel Consumption (kg)', color='r')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Cumulative Fuel Consumption (kg)')
+    # plt.title('Cumulative Fuel Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    # Plot total power vs. time
-    plt.subplot(2, 2, 4)
-    plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power (W)', color='m')
-    plt.xlabel('Time (s)')
-    plt.ylabel('Total Power (W)')
-    plt.title('Total Power over Time')
-    plt.legend()
-    plt.grid(True)
+    # # Plot total power vs. time
+    # plt.subplot(2, 2, 4)
+    # plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power (W)', color='m')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Total Power (W)')
+    # plt.title('Total Power over Time')
+    # plt.legend()
+    # plt.grid(True)
 
-    plt.tight_layout()
-    plt.show()
+    # plt.tight_layout()
+    # plt.show()
 
     return results, weight, time, horizontal_distance, total_power, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions, altitude  # Include final altitude

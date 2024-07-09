@@ -379,9 +379,15 @@ takeoff_params = {
     'initial_angle': initial_angle,
     'final_angle': final_angle,
     'time_step': time_step,
+    'gearbox_efficiency': gearbox_efficiency,
+    'inverter_efficiency': inverter_efficiency,
+    'battery_capacity_kWh': battery_capacity_kWh,
+    'usable_capacity_factor': usable_capacity_factor,
     'warmup_duration': warmup_duration,
     'initial_weight': mass,  # kg
-    'turn_on_duration': engine_turn_on_params['turn_on_duration']  # Include turn-on duration
+    'turn_on_duration': engine_turn_on_params['turn_on_duration'],  # Include turn-on duration
+    'max_motor_power_kW': steady_state_motor_power_kW,
+    'DOH': 0.3
 }
 
 # Parameters for the additional climb phase
