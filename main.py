@@ -27,7 +27,7 @@ time_step = 0.1  # time step for simulation
 
 # Aircraft climb params
 propeller_efficiency_C = 0.85
-propeller_efficiency_Cr = 0.9
+propeller_efficiency_Cr = 0.85
 
 # Hybrid system parameters
 gearbox_efficiency = 0.99
