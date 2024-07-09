@@ -27,6 +27,7 @@ time_step = 0.1  # time step for simulation
 
 # Aircraft climb params
 propeller_efficiency_C = 0.85
+propeller_efficiency_Cr = 0.9
 
 # Hybrid system parameters
 gearbox_efficiency = 0.99
@@ -241,7 +242,7 @@ phase3_params = {
     'idle_power_kw': idle_power_kw,
     'propeller_efficiency': propeller_efficiency_C,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 }
 
 # Parameters for the cruise phase
@@ -249,7 +250,7 @@ cruise_params = {
     'initial_altitude': 24000,  # in feet
     'initial_airspeed': 200,  # in knots
     'final_airspeed': 250,  # in knots
-    'acceleration_duration': 180,  # in seconds (1 minute)
+    'acceleration_duration': 180,  # in seconds 
     'cruise_distance': 100,  # in km
     'time_step': 1,  # in seconds
     'C_D0': C_D0,
@@ -263,7 +264,10 @@ cruise_params = {
     'usable_capacity_factor': usable_capacity_factor,
     'steady_state_motor_power_kW': steady_state_motor_power_kW,
     'max_power_kw': max_power_kw,
-    'idle_power_kw': idle_power_kw
+    'idle_power_kw': idle_power_kw,
+    'propeller_efficiency': propeller_efficiency_Cr,
+    'max_motor_power_kW': steady_state_motor_power_kW,
+    'DOH': 0
 }
 
 # Parameters for the descent phase

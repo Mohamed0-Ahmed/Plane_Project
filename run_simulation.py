@@ -212,7 +212,7 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     initial_horizontal_distance = final_horizontal_distance_phase3
 
     # Run the cruise phase
-    results_cruise, final_weight_cruise, final_time_cruise, final_horizontal_distance_cruise, cumulative_fuel_consumed_cruise, total_carbon_emissions_cruise, total_co_emissions_cruise, total_nox_emissions_cruise, total_so2_emissions_cruise = simulate_cruise_phase(
+    results_cruise, final_weight_cruise, final_time_cruise, final_horizontal_distance_cruise, cumulative_battery_energy_consumed_cruise, cumulative_fuel_consumed_cruise, total_carbon_emissions_cruise, total_co_emissions_cruise, total_nox_emissions_cruise, total_so2_emissions_cruise, required_batteries_cruise = simulate_cruise_phase(
         cruise_params,
         simple_wind_speed_scenario,
         simple_crosswind_speed_scenario,
