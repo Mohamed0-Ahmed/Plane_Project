@@ -505,7 +505,7 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
         current_fuel_consumed = metrics_engine['fuel_consumed_kg_total']  # Incremental fuel consumption
         cumulative_fuel_consumed += current_fuel_consumed
 
-        print(f"Time: {time:.2f}s, Fuel Consumed: {current_fuel_consumed:.4f}kg, Cumulative Fuel Consumed: {cumulative_fuel_consumed:.4f}kg")
+        #print(f"Time: {time:.2f}s, Fuel Consumed: {current_fuel_consumed:.4f}kg, Cumulative Fuel Consumed: {cumulative_fuel_consumed:.4f}kg")
 
         total_carbon_emissions += metrics_engine['carbon_emissions_kg_total']
         total_co_emissions += metrics_engine['co_emissions_kg_total']
