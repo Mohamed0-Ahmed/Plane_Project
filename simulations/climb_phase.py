@@ -260,6 +260,9 @@ def simulate_climb_phase(params, wind_speed_scenario, crosswind_speed_scenario, 
     battery_energy_consumptions = []
     cumulative_battery_energy_list = []
 
+    # Initialize engine_power to ensure it's always assigned
+    engine_power = 0
+
     while altitude < target_altitude or airspeed < final_airspeed:
         wind_speed = wind_speed_scenario(time)
         crosswind_speed = crosswind_speed_scenario(time)
@@ -280,14 +283,14 @@ def simulate_climb_phase(params, wind_speed_scenario, crosswind_speed_scenario, 
         total_power = (power_drag + power_climb)
         total_power = total_power / propeller_efficiency
 
-        # Ensure engine_power is not negative
+        # Ensure power_required is not negative
         power_required = max(total_power, 0)
         motor_power = min(power_required * degree_of_hybridization, max_motor_power_kW * 2 * 1000)
         engine_power = power_required - motor_power
 
         # Ensure motor power does not exceed capabilities
         motor_power = max(min(motor_power, max_motor_power_kW * 1000 * 2), 0)
-        engine_power = power_required - motor_power
+        engine_power = max(power_required - motor_power, 0)  # Ensure engine_power is non-negative
 
         motor_power_per = motor_power / 2
         engine_power_per = engine_power / 2
@@ -346,7 +349,7 @@ def simulate_climb_phase(params, wind_speed_scenario, crosswind_speed_scenario, 
         time += params['time_step']
 
     required_batteries = np.ceil(cumulative_battery_energy_consumed / usable_battery_capacity_kWh)
-    print(f'battey amount {required_batteries:2f}')
+    print(f'Battery amount: {required_batteries:.2f}')
 
     results = pd.DataFrame({
         'Time (s)': times,
@@ -382,66 +385,4 @@ def simulate_climb_phase(params, wind_speed_scenario, crosswind_speed_scenario, 
         'Cumulative Battery Energy Consumption (kWh)': cumulative_battery_energy_list
     })
 
-    # plt.figure(figsize=(14, 8))
-
-    # plt.subplot(2, 2, 1)
-    # plt.plot(results['Time (s)'], results['Altitude (m)'], label='Altitude')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Altitude (m)')
-    # plt.title('Altitude over Time')
-    # plt.legend()
-    # plt.grid(True)
-
-    # plt.subplot(2, 2, 2)
-    # plt.plot(results['Time (s)'], results['Airspeed (m/s)'], label='Airspeed')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Airspeed (m/s)')
-    # plt.title('Airspeed over Time')
-    # plt.legend()
-    # plt.grid(True)
-
-    # plt.subplot(2, 2, 3)
-    # plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power', color='green')
-    # plt.plot(results['Time (s)'], results['Engine Power (W)'], label='Engine Power', color='blue')
-    # plt.plot(results['Time (s)'], results['Motor Power (W)'], label='Motor Power', color='purple')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Power (W)')
-    # plt.title('Power over Time')
-    # plt.legend()
-    # plt.grid(True)
-
-    # plt.subplot(2, 2, 4)
-    # plt.plot(results['Time (s)'], results['Cumulative Fuel Consumption (kg)'], label='Cumulative Fuel Consumption', color='red')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Cumulative Fuel Consumption (kg)')
-    # plt.title('Cumulative Fuel Consumption over Time')
-    # plt.legend()
-    # plt.grid(True)
-
-    # plt.tight_layout()
-    # plt.show()
-
-    # plt.figure(figsize=(14, 6))
-
-    # plt.subplot(1, 2, 1)
-    # plt.plot(results['Time (s)'], results['Battery Energy Consumption (kWh)'], label='Battery Energy Consumption', color='purple')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Battery Energy Consumption (kWh)')
-    # plt.title('Battery Energy Consumption over Time')
-    # plt.legend()
-    # plt.grid(True)
-
-    # plt.subplot(1, 2, 2)
-    # plt.plot(results['Time (s)'], results['Cumulative Battery Energy Consumption (kWh)'], label='Cumulative Battery Energy Consumption', color='brown')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Cumulative Battery Energy Consumption (kWh)')
-    # plt.title('Cumulative Battery Energy Consumption over Time')
-    # plt.legend()
-    # plt.grid(True)
-
-    # plt.tight_layout()
-    # plt.show()
-
-
     return results, weight, time, horizontal_distance, engine_power, cumulative_battery_energy_consumed, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions, required_batteries
-
