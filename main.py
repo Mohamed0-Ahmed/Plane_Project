@@ -713,7 +713,7 @@ C_D = 0.05  # example drag coefficient with landing gear
 C_L_MAX = 1.8  # maximum lift coefficient for stall speed calculation
 C_L_AVG = 0.7  # average lift coefficient for takeoff roll
 mu = 0.02  # example coefficient of friction
-propeller_efficiency = 0.80  # propeller efficiency during takeoff
+propeller_efficiency = 0.8  # propeller efficiency during takeoff
 idle_power_kw = 74.57  # kW per engine
 max_power_kw = 1602  # kW per engine
 initial_angle = 0  # degrees
@@ -731,7 +731,7 @@ gearbox_efficiency = 0.99
 inverter_efficiency = 0.93
 battery_capacity_kWh = 5  # Total capacity of one battery in kWh
 usable_capacity_factor = 0.8  # 80% of the battery can be used
-steady_state_motor_power_kW = 150  # Steady state motor power per motor
+steady_state_motor_power_kW = 450  # Steady state motor power per motor
 num_motors = 2  # Number of electric motors
 num_engines = 2  # Number of engines
 
@@ -740,7 +740,7 @@ mass = 16500
 
 # Step 2: Adjust the cruise distance based on the total desired distance
 total_flight_distance = 250 * 1000  # Example total flight distance in meters
-target = 24000
+target = 12000
 # Parameters for the engine turn-on phase
 engine_turn_on_params = {
     'idle_power_kw': idle_power_kw,
@@ -784,7 +784,7 @@ takeoff_params = {
     'initial_weight': mass,  # kg
     'turn_on_duration': engine_turn_on_params['turn_on_duration'],  # Include turn-on duration
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0
+    'DOH': 0.15
 }
 
 # Parameters for the additional climb phase
@@ -795,7 +795,7 @@ take_off_C_params = {
     'final_airspeed': 120,  # in knots
     'roc': 1800,  # rate of climb in feet per minute
     'initial_weight': None,  # in kg, to be updated based on the end of takeoff phase
-    'time_step': 0.001,  # in seconds
+    'time_step': 1,  # in seconds
     'C_D0': C_D0,
     'k': k,
     'S': S,
@@ -806,10 +806,10 @@ take_off_C_params = {
     'battery_capacity_kWh': battery_capacity_kWh,
     'usable_capacity_factor': usable_capacity_factor,
     'max_power_kw': max_power_kw,
-    'propeller_efficiency': propeller_efficiency_C,
+    'propeller_efficiency': propeller_efficiency,
     'idle_power_kw': idle_power_kw,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0
+    'DOH': 0.15
 }
 
 # Parameters for the climb phase (single long climb)
@@ -836,7 +836,7 @@ climb_params = {
     'idle_power_kw': idle_power_kw,
     'propeller_efficiency': propeller_efficiency_C,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0
+    'DOH': 0.15
 }
 
 # Parameters for the climb phase (single phase from 50ft to 24000ft)
@@ -844,7 +844,7 @@ climb_phase_params = {
     'initial_altitude': 50,  # in feet
     'target_altitude': target,  # in feet
     'initial_airspeed': 120,  # in knots
-    'final_airspeed': 250,  # in knots
+    'final_airspeed': 200,  # in knots
     'initial_roc': 1800,  # initial rate of climb in feet per minute
     'final_roc': 1000,  # final rate of climb in feet per minute
     'time_step': 1,  # in seconds
@@ -869,7 +869,7 @@ climb_phase_params = {
 # Parameters for the cruise phase
 cruise_params = {
     'initial_altitude': target,  # in feet
-    'initial_airspeed': 250,  # in knots
+    'initial_airspeed': 200,  # in knots
     'final_airspeed': 250,  # in knots
     'acceleration_duration': 180,  # in seconds 
     'cruise_distance': None,  # in km
