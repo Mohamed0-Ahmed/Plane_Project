@@ -1379,13 +1379,13 @@ usable_capacity_factor = 0.8  # 80% of the battery can be used
 steady_state_motor_power_kW = 150  # Steady state motor power per motor
 num_motors = 2  # Number of electric motors
 num_engines = 2  # Number of engines
-
+total_flight_distance = 250 * 1000  # Example total flight distance in meters
 # Genetic Algorithm parameters
 POP_SIZE = 50
 GENS = 40
 MUTPB = 0.2
 CXPB = 0.5
-EARLY_STOPPING_THRESHOLD = 10  # Number of generations with no improvement to trigger early stopping
+EARLY_STOPPING_THRESHOLD = 5  # Number of generations with no improvement to trigger early stopping
 
 # Define the problem space
 ALT_MIN = 10000  # Minimum altitude for climb phases (example value)
@@ -1471,7 +1471,7 @@ take_off_C_params = {
 # Initialize phase parameters
 phase1_params = {
     'initial_altitude': 50,  # in feet
-    'target_altitude': 5000,  # in feet
+    'target_altitude': 7936,  # in feet
     'initial_airspeed': 120,  # in knots
     'final_airspeed': 130,  # in knots
     'roc': roc1,  # rate of climb in feet per minute
@@ -1495,7 +1495,7 @@ phase1_params = {
 }
 
 between_1_2_climb = {
-    'initial_altitude': 5000,  # in feet (starting from the end of phase 1)
+    'initial_altitude': 7936,  # in feet (starting from the end of phase 1)
     'initial_airspeed': 130,  # in knots (starting from the end of phase 1)
     'final_airspeed': 130,  # in knots
     'initial_roc': roc1,  # initial rate of climb in feet per minute
@@ -1522,7 +1522,7 @@ between_1_2_climb = {
 }
 phase2_params = {
     'initial_altitude': None,  # will be updated after phase 1
-    'target_altitude': 15000,  # in feet
+    'target_altitude': 9200,  # in feet
     'initial_airspeed': 130,  # in knots
     'final_airspeed': 200,  # in knots
     'roc': roc2,  # rate of climb in feet per minute
@@ -1545,7 +1545,7 @@ phase2_params = {
     'DOH': 0
 }
 between_2_3_climb = {
-    'initial_altitude': 15000,  # in feet (starting from the end of phase 1)
+    'initial_altitude': 9200,  # in feet (starting from the end of phase 1)
     'initial_airspeed': 200,  # in knots (starting from the end of phase 1)
     'final_airspeed': 200,  # in knots
     'initial_roc': roc2,  # initial rate of climb in feet per minute
@@ -1573,7 +1573,7 @@ between_2_3_climb = {
 
 phase3_params = {
     'initial_altitude': None,  # in feet (starting from the end of phase 2)
-    'target_altitude': 24000,  # in feet
+    'target_altitude': 17000,  # in feet
     'initial_airspeed': 200,  # in knots (starting from the end of phase 2)
     'final_airspeed': 200,  # in knots
     'roc': roc3,  # rate of climb in feet per minute
@@ -1597,7 +1597,7 @@ phase3_params = {
 }
 
 cruise_params = {
-    'initial_altitude': 24000,  # in feet
+    'initial_altitude': 19000,  # in feet
     'initial_airspeed': 200,  # in knots
     'final_airspeed': 250,  # in knots
     'acceleration_duration': 180,  # in seconds 
@@ -1621,7 +1621,7 @@ cruise_params = {
 }
 
 descent_params = {
-    'initial_altitude': 24000,  # in feet
+    'initial_altitude': 17000,  # in feet
     'target_altitude': 3000,  # in feet
     'airspeed': 250,  # in knots
     'rate_of_descent': 1500,  # in feet per minute
@@ -1673,142 +1673,162 @@ taxi_params2 = {
     'initial_weight': mass,  # initial weight in kg
 }
 
-# Create the fitness and individual classes
-creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("Individual", list, fitness=creator.FitnessMin)
-
-toolbox = base.Toolbox()
-toolbox.register("attr_alt", np.random.uniform, ALT_MIN, ALT_MAX)
-toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_alt, n=3)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
-
-def eval_individual(individual):
-    # Ensure altitude order constraint
-    individual.sort()
-
-    phase1_params['target_altitude'] = individual[0]
-    phase2_params['target_altitude'] = individual[1]
-    phase3_params['target_altitude'] = individual[2]
-
-    # Update intermediate phases to link altitudes correctly
-    phase2_params['initial_altitude'] = phase1_params['target_altitude']
-    phase3_params['initial_altitude'] = phase2_params['target_altitude']
-    descent_params['initial_altitude'] = phase3_params['target_altitude']
-
     # Calculate the total distance excluding the cruise phase
 # Run the simulation with the best individual
-    total_distance_excluding_cruise = calculate_total_distance_excluding_cruise(
+total_distance_excluding_cruise = calculate_total_distance_excluding_cruise(
         engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
         phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
         phase3_params, descent_params, approach_and_landing_params, taxi_params2, 
     )
     # Adjust the cruise distance based on the total desired distance
-    cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 1000  # Convert to km
-    cruise_params['cruise_distance'] = cruise_distance
+cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 1000  # Convert to km
+cruise_params['cruise_distance'] = cruise_distance
 
     # Run the simulation for all phases with the updated cruise distance
-    combined_results = run_all_phases(
+combined_results = run_all_phases(
     engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
     phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
     phase3_params, cruise_params, descent_params, approach_and_landing_params, 
     taxi_params2, num_engines
 )
 
-    total_fuel_consumed = combined_results['Cumulative Fuel Consumption (kg)'].iloc[-1]
-    return (total_fuel_consumed,)
 
-toolbox.register("evaluate", eval_individual)
-toolbox.register("mate", tools.cxBlend, alpha=0.5)
-toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
-toolbox.register("select", tools.selTournament, tournsize=3)
+# # Create the fitness and individual classes
+# creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
+# creator.create("Individual", list, fitness=creator.FitnessMin)
 
-def constrain_altitudes(individual):
-    individual.sort()
-    return individual
+# toolbox = base.Toolbox()
+# toolbox.register("attr_alt", np.random.uniform, ALT_MIN, ALT_MAX)
+# toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attr_alt, n=3)
+# toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
-def optimize_for_distance(total_flight_distance_km):
-    global total_flight_distance
-    total_flight_distance = total_flight_distance_km * 1000  # Convert to meters
-    population = toolbox.population(n=POP_SIZE)
-    halloffame = tools.HallOfFame(1)
-    stats = tools.Statistics(lambda ind: ind.fitness.values)
-    stats.register("avg", np.mean)
-    stats.register("std", np.std)
-    stats.register("min", np.min)
-    stats.register("max", np.max)
+# def eval_individual(individual):
+#     # Ensure altitude order constraint
+#     individual.sort()
 
-    # Apply constraints
-    for ind in population:
-        constrain_altitudes(ind)
+#     phase1_params['target_altitude'] = individual[0]
+#     phase2_params['target_altitude'] = individual[1]
+#     phase3_params['target_altitude'] = individual[2]
 
-    # Variables for early stopping
-    best_fitness = float('inf')
-    no_improvement_gens = 0
+#     # Update intermediate phases to link altitudes correctly
+#     phase2_params['initial_altitude'] = phase1_params['target_altitude']
+#     phase3_params['initial_altitude'] = phase2_params['target_altitude']
+#     descent_params['initial_altitude'] = phase3_params['target_altitude']
 
-    # Run the genetic algorithm with early stopping
-    for gen in range(GENS):
-        population, logbook = algorithms.eaSimple(population, toolbox, cxpb=CXPB, mutpb=MUTPB, ngen=1,
-                                                  stats=stats, halloffame=halloffame, verbose=True)
+#     # Calculate the total distance excluding the cruise phase
+# # Run the simulation with the best individual
+#     total_distance_excluding_cruise = calculate_total_distance_excluding_cruise(
+#         engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
+#         phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
+#         phase3_params, descent_params, approach_and_landing_params, taxi_params2, 
+#     )
+#     # Adjust the cruise distance based on the total desired distance
+#     cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 1000  # Convert to km
+#     cruise_params['cruise_distance'] = cruise_distance
+
+#     # Run the simulation for all phases with the updated cruise distance
+#     combined_results = run_all_phases(
+#     engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
+#     phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
+#     phase3_params, cruise_params, descent_params, approach_and_landing_params, 
+#     taxi_params2, num_engines
+# )
+
+#     total_fuel_consumed = combined_results['Cumulative Fuel Consumption (kg)'].iloc[-1]
+#     return (total_fuel_consumed,)
+
+# toolbox.register("evaluate", eval_individual)
+# toolbox.register("mate", tools.cxBlend, alpha=0.5)
+# toolbox.register("mutate", tools.mutGaussian, mu=0, sigma=1, indpb=0.2)
+# toolbox.register("select", tools.selTournament, tournsize=3)
+
+# def constrain_altitudes(individual):
+#     individual.sort()
+#     return individual
+
+# def optimize_for_distance(total_flight_distance_km):
+#     global total_flight_distance
+#     total_flight_distance = total_flight_distance_km * 1000  # Convert to meters
+#     population = toolbox.population(n=POP_SIZE)
+#     halloffame = tools.HallOfFame(1)
+#     stats = tools.Statistics(lambda ind: ind.fitness.values)
+#     stats.register("avg", np.mean)
+#     stats.register("std", np.std)
+#     stats.register("min", np.min)
+#     stats.register("max", np.max)
+
+#     # Apply constraints
+#     for ind in population:
+#         constrain_altitudes(ind)
+
+#     # Variables for early stopping
+#     best_fitness = float('inf')
+#     no_improvement_gens = 0
+
+#     # Run the genetic algorithm with early stopping
+#     for gen in range(GENS):
+#         population, logbook = algorithms.eaSimple(population, toolbox, cxpb=CXPB, mutpb=MUTPB, ngen=1,
+#                                                   stats=stats, halloffame=halloffame, verbose=True)
         
-        current_best_fitness = halloffame[0].fitness.values[0]
-        print(f"Generation {gen + 1}, Best Fitness: {current_best_fitness}")
+#         current_best_fitness = halloffame[0].fitness.values[0]
+#         print(f"Generation {gen + 1}, Best Fitness: {current_best_fitness}")
 
-        if current_best_fitness < best_fitness:
-            best_fitness = current_best_fitness
-            no_improvement_gens = 0
-        else:
-            no_improvement_gens += 1
+#         if current_best_fitness < best_fitness:
+#             best_fitness = current_best_fitness
+#             no_improvement_gens = 0
+#         else:
+#             no_improvement_gens += 1
         
-        if no_improvement_gens >= EARLY_STOPPING_THRESHOLD:
-            print(f"Early stopping at generation {gen + 1} due to no improvement in {EARLY_STOPPING_THRESHOLD} generations.")
-            break
+#         if no_improvement_gens >= EARLY_STOPPING_THRESHOLD:
+#             print(f"Early stopping at generation {gen + 1} due to no improvement in {EARLY_STOPPING_THRESHOLD} generations.")
+#             break
 
-    best = halloffame[0]
-    print(f"Best individual for {total_flight_distance_km} km:", best)
-    print("Best fitness:", best.fitness.values)
+#     best = halloffame[0]
+#     print(f"Best individual for {total_flight_distance_km} km:", best)
+#     print("Best fitness:", best.fitness.values)
 
-    # Update the climb parameters with the best individual
-    phase1_params['target_altitude'] = best[0]
-    phase2_params['target_altitude'] = best[1]
-    phase3_params['target_altitude'] = best[2]
+#     # Update the climb parameters with the best individual
+#     phase1_params['target_altitude'] = best[0]
+#     phase2_params['target_altitude'] = best[1]
+#     phase3_params['target_altitude'] = best[2]
 
-    # Update intermediate phases to link altitudes correctly
-    phase2_params['initial_altitude'] = phase1_params['target_altitude']
-    phase3_params['initial_altitude'] = phase2_params['target_altitude']
-    descent_params['initial_altitude'] = phase3_params['target_altitude']
+#     # Update intermediate phases to link altitudes correctly
+#     phase2_params['initial_altitude'] = phase1_params['target_altitude']
+#     phase3_params['initial_altitude'] = phase2_params['target_altitude']
+#     descent_params['initial_altitude'] = phase3_params['target_altitude']
 
-    # Calculate the total distance excluding the cruise phase
-    total_distance_excluding_cruise = calculate_total_distance_excluding_cruise(
-    engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
-    phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
-    phase3_params, descent_params, approach_and_landing_params, taxi_params2
-        )
-    cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 1000
-    cruise_params['cruise_distance'] = cruise_distance
+#     # Calculate the total distance excluding the cruise phase
+#     total_distance_excluding_cruise = calculate_total_distance_excluding_cruise(
+#     engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
+#     phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
+#     phase3_params, descent_params, approach_and_landing_params, taxi_params2
+#         )
+#     cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 1000
+#     cruise_params['cruise_distance'] = cruise_distance
 
     
 
-    # Run the simulation for all phases with the updated cruise distance
-    combined_results = run_all_phases(
-    engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
-    phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
-    phase3_params, cruise_params, descent_params, approach_and_landing_params, 
-    taxi_params2, num_engines
-)
+#     # Run the simulation for all phases with the updated cruise distance
+#     combined_results = run_all_phases(
+#     engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
+#     phase1_params, between_1_2_climb, phase2_params, between_2_3_climb, 
+#     phase3_params, cruise_params, descent_params, approach_and_landing_params, 
+#     taxi_params2, num_engines
+# )
 
-    # Print and plot results
-    print_totals(combined_results)
-    plot_results(combined_results)
+#     # Print and plot results
+#     print_totals(combined_results)
+#     plot_results(combined_results)
 
-    # Save results to CSV
-    combined_results.to_csv(f'results_{total_flight_distance_km}_km.csv', index=False)
-    best_individual_df = pd.DataFrame([best], columns=['Phase 1 Altitude', 'Phase 2 Altitude', 'Phase 3 Altitude'])
-    best_individual_df.to_csv(f'best_individual_{total_flight_distance_km}_km.csv', index=False)
+#     # Save results to CSV
+#     combined_results.to_csv(f'results_{total_flight_distance_km}_km.csv', index=False)
+#     best_individual_df = pd.DataFrame([best], columns=['Phase 1 Altitude', 'Phase 2 Altitude', 'Phase 3 Altitude'])
+#     best_individual_df.to_csv(f'best_individual_{total_flight_distance_km}_km.csv', index=False)
 
-    print(f"Cruise distance for {total_flight_distance_km} km: {cruise_distance} km")
-    return logbook
+#     print(f"Cruise distance for {total_flight_distance_km} km: {cruise_distance} km")
+#     return logbook
 
-if __name__ == "__main__":
-    for total_flight_distance_km in range(150, 501, 50):  # Adjust range as needed
-        print(f"Optimizing for total flight distance: {total_flight_distance_km} km")
-        logbook = optimize_for_distance(total_flight_distance_km)
+# if __name__ == "__main__":
+#     for total_flight_distance_km in range(250, 501, 50):  # Adjust range as needed
+#         print(f"Optimizing for total flight distance: {total_flight_distance_km} km")
+#         logbook = optimize_for_distance(total_flight_distance_km)
