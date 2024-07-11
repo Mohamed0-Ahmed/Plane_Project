@@ -422,7 +422,7 @@ takeoff_params = {
     'initial_weight': mass,  # kg
     'turn_on_duration': engine_turn_on_params['turn_on_duration'],  # Include turn-on duration
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 }
 
 # Parameters for the additional climb phase
@@ -447,7 +447,7 @@ take_off_C_params = {
     'propeller_efficiency': propeller_efficiency_C,
     'idle_power_kw': idle_power_kw,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 }
 
 # Parameters for the first phase of climb
@@ -473,7 +473,7 @@ phase1_params = {
     'idle_power_kw': idle_power_kw,
     'propeller_efficiency': propeller_efficiency_C,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 }
 
 # Parameters for the new climb phase between phase1 and phase2
@@ -501,7 +501,7 @@ between_1_2_climb = {
     'propeller_efficiency': propeller_efficiency_C,
     'idle_power_kw': idle_power_kw,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 }
 
 # Parameters for the second phase of climb
@@ -527,10 +527,10 @@ phase2_params = {
     'idle_power_kw': idle_power_kw,
     'propeller_efficiency': propeller_efficiency_C,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 }
 between_2_3_climb = {
-    'initial_altitude': 15000,  # in feet (starting from the end of phase 1)
+    'initial_altitude': 8300,  # in feet (starting from the end of phase 1)
     'initial_airspeed': 200,  # in knots (starting from the end of phase 1)
     'final_airspeed': 200,  # in knots
     'initial_roc': 1500,  # initial rate of climb in feet per minute
@@ -553,14 +553,14 @@ between_2_3_climb = {
     'propeller_efficiency': propeller_efficiency_C,
     'idle_power_kw': idle_power_kw,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0
 
 }
 
 # Parameters for the third phase of climb
 phase3_params = {
     'initial_altitude': None,  # in feet (starting from the end of phase 2)
-    'target_altitude': 24000,  # in feet
+    'target_altitude': 17000,  # in feet
     'initial_airspeed': 200,  # in knots (starting from the end of phase 2)
     'final_airspeed': 200,  # in knots
     'roc': 1000,  # rate of climb in feet per minute
@@ -585,7 +585,7 @@ phase3_params = {
 
 # Parameters for the cruise phase
 cruise_params = {
-    'initial_altitude': 24000,  # in feet
+    'initial_altitude': 17000,  # in feet
     'initial_airspeed': 200,  # in knots
     'final_airspeed': 250,  # in knots
     'acceleration_duration': 180,  # in seconds 
@@ -610,7 +610,7 @@ cruise_params = {
 
 # Parameters for the descent phase
 descent_params = {
-    'initial_altitude': 24000,  # in feet
+    'initial_altitude': 17000,  # in feet
     'target_altitude': 10000,  # in feet
     'airspeed': 250,  # in knots
     'rate_of_descent': 1500,  # in feet per minute
@@ -677,7 +677,7 @@ cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 10
 cruise_params['cruise_distance'] = cruise_distance
 
 cruise_distance = (total_flight_distance - total_distance_excluding_cruise) / 1000  # Convert to km
-
+print(f'cruise distance {cruise_distance}')
 # Update cruise_params with the calculated cruise distance
 cruise_params['cruise_distance'] = cruise_distance
 print(f'cruise distance {cruise_distance:2f}')

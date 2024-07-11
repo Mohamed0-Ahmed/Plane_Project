@@ -445,3 +445,4 @@ def simulate_climb_phase(params, wind_speed_scenario, crosswind_speed_scenario, 
 
     return results, weight, time, horizontal_distance, engine_power, cumulative_battery_energy_consumed, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions, required_batteries
 
+# hellow theree
