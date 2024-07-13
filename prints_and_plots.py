@@ -1,5 +1,47 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
+# def print_totals(combined_results):
+#     total_fuel_consumed = combined_results['Cumulative Fuel Consumption (kg)'].iloc[-1]
+#     total_carbon_emissions = combined_results['Cumulative Carbon Emissions (kg)'].iloc[-1]
+#     total_co_emissions = combined_results['Cumulative CO Emissions (kg)'].iloc[-1]
+#     total_nox_emissions = combined_results['Cumulative NOx Emissions (kg)'].iloc[-1]
+#     total_so2_emissions = combined_results['Cumulative SO2 Emissions (kg)'].iloc[-1]
+
+#     print(f"Total fuel consumed (kg): {total_fuel_consumed:.2f}")
+#     print(f"Total carbon emissions (kg): {total_carbon_emissions:.2f}")
+#     print(f"Total CO emissions (kg): {total_co_emissions:.2f}")
+#     print(f"Total NOx emissions (kg): {total_nox_emissions:.2f}")
+#     print(f"Total SO2 emissions (kg): {total_so2_emissions:.2f}")
+#     # Create a dictionary with the totals
+#     totals_dict = {
+#     'Total Fuel Consumed (kg)': [total_fuel_consumed],
+#     'Total Carbon Emissions (kg)': [total_carbon_emissions],
+#     'Total CO Emissions (kg)': [total_co_emissions],
+#     'Total NOx Emissions (kg)': [total_nox_emissions],
+#     'Total SO2 Emissions (kg)': [total_so2_emissions]
+# }
+
+#     # Convert the dictionary to a DataFrame
+#     totals_df = pd.DataFrame(totals_dict)
+
+# # Save the totals to a CSV file
+#     totals_df.to_csv('totals_results.csv', index=False)
+#     # Define the CSV file path
+#     csv_file = 'totals_results.csv'
+
+# # Check if the file exists
+#     if not os.path.isfile(csv_file):
+#     # If the file does not exist, write the header
+#         totals_df.to_csv(csv_file, index=False)
+#     else:
+#     # If the file exists, append the data without writing the header
+#         totals_df.to_csv(csv_file, mode='a', header=False, index=False)
+
+
+import os
+
 
 def print_totals(combined_results):
     total_fuel_consumed = combined_results['Cumulative Fuel Consumption (kg)'].iloc[-1]
@@ -14,7 +56,31 @@ def print_totals(combined_results):
     print(f"Total NOx emissions (kg): {total_nox_emissions:.2f}")
     print(f"Total SO2 emissions (kg): {total_so2_emissions:.2f}")
 
+    # Create a dictionary with the totals
+    totals_dict = {
+        'Total Fuel Consumed (kg)': [total_fuel_consumed],
+        'Total Carbon Emissions (kg)': [total_carbon_emissions],
+        'Total CO Emissions (kg)': [total_co_emissions],
+        'Total NOx Emissions (kg)': [total_nox_emissions],
+        'Total SO2 Emissions (kg)': [total_so2_emissions]
+    }
+
+    # Convert the dictionary to a DataFrame
+    totals_df = pd.DataFrame(totals_dict)
+
+    # Define the CSV file path
+    csv_file = 'totals_results.csv'
+
+    # Check if the file exists
+    if not os.path.isfile(csv_file):
+        # If the file does not exist, write the header
+        totals_df.to_csv(csv_file, index=False)
+    else:
+        # If the file exists, append the data without writing the header
+        totals_df.to_csv(csv_file, mode='a', header=False, index=False)
+
 def plot_results(combined_results):
+
     # Plot the total emissions as bar graphs
     total_emissions = combined_results[['Cumulative Carbon Emissions (kg)', 'Cumulative CO Emissions (kg)', 'Cumulative NOx Emissions (kg)', 'Cumulative SO2 Emissions (kg)']].iloc[-1]
 

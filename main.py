@@ -736,11 +736,11 @@ num_motors = 2  # Number of electric motors
 num_engines = 2  # Number of engines
 
 # Get user input for aircraft mass
-mass = 16500
+mass = 15000
 
 # Step 2: Adjust the cruise distance based on the total desired distance
-total_flight_distance = 150 * 1000  # Example total flight distance in meters
-target = 12000
+total_flight_distance = 200 * 1000  # Example total flight distance in meters
+target = 12500
 # Parameters for the engine turn-on phase
 engine_turn_on_params = {
     'idle_power_kw': idle_power_kw,
@@ -784,7 +784,7 @@ takeoff_params = {
     'initial_weight': mass,  # kg
     'turn_on_duration': engine_turn_on_params['turn_on_duration'],  # Include turn-on duration
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0.2
 }
 
 # Parameters for the additional climb phase
@@ -792,7 +792,7 @@ take_off_C_params = {
     'initial_altitude': 0,  # in feet
     'target_altitude': 50,  # in feet
     'initial_airspeed': 120,  # in knots
-    'final_airspeed': 120,  # in knots
+    'final_airspeed': 125,  # in knots
     'roc': 1800,  # rate of climb in feet per minute
     'initial_weight': None,  # in kg, to be updated based on the end of takeoff phase
     'time_step': 1,  # in seconds
@@ -809,7 +809,7 @@ take_off_C_params = {
     'propeller_efficiency': propeller_efficiency,
     'idle_power_kw': idle_power_kw,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
+    'DOH': 0.2
 }
 
 # Parameters for the climb phase (single long climb)
@@ -843,8 +843,8 @@ take_off_C_params = {
 climb_phase_params = {
     'initial_altitude': 50,  # in feet
     'target_altitude': target,  # in feet
-    'initial_airspeed': 120,  # in knots
-    'final_airspeed': 200,  # in knots
+    'initial_airspeed': 125,  # in knots
+    'final_airspeed': 250,  # in knots
     'initial_roc': 1800,  # initial rate of climb in feet per minute
     'final_roc': 1000,  # final rate of climb in feet per minute
     'time_step': 1,  # in seconds
@@ -862,14 +862,14 @@ climb_phase_params = {
     'idle_power_kw': idle_power_kw,
     'propeller_efficiency': propeller_efficiency_C,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.5
+    'DOH': 0.2
 }
 
 
 # Parameters for the cruise phase
 cruise_params = {
     'initial_altitude': target,  # in feet
-    'initial_airspeed': 200,  # in knots
+    'initial_airspeed': 250,  # in knots
     'final_airspeed': 250,  # in knots
     'acceleration_duration': 180,  # in seconds 
     'cruise_distance': None,  # in km
@@ -968,5 +968,6 @@ combined_results = run_all_phases(
 
 # Print and plot results
 print_totals(combined_results)
+combined_results.to_csv('combined_results.csv', index=False)
 plot_results(combined_results)
 print(f'cruise distance {cruise_distance}')
