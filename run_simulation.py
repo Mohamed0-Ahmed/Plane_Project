@@ -1019,7 +1019,7 @@ def calculate_total_distance_excluding_cruise(engine_turn_on_params, taxi_params
     # Sum the total horizontal distance excluding the cruise phase
     total_distance_excluding_cruise = (
                                        final_horizontal_distance_takeoff + final_horizontal_distance_take_off_C + 
-                                       final_horizontal_distance_climb + final_horizontal_distance_descent
+                                       final_horizontal_distance_climb + final_horizontal_distance_descent + final_horizontal_distance_landing
                                        )
 
     return total_distance_excluding_cruise

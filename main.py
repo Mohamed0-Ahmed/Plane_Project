@@ -723,7 +723,7 @@ time_step = 0.1  # time step for simulation
 
 # Aircraft climb params
 propeller_efficiency_C = 0.85
-propeller_efficiency_Cr = 0.85
+propeller_efficiency_Cr = 0.9
 ROC1 = 1800
 ROC2 = 1000
 # Hybrid system parameters
@@ -731,7 +731,7 @@ gearbox_efficiency = 0.99
 inverter_efficiency = 0.93
 battery_capacity_kWh = 5  # Total capacity of one battery in kWh
 usable_capacity_factor = 0.8  # 80% of the battery can be used
-steady_state_motor_power_kW = 450  # Steady state motor power per motor
+steady_state_motor_power_kW = 150  # Steady state motor power per motor
 num_motors = 2  # Number of electric motors
 num_engines = 2  # Number of engines
 
@@ -739,7 +739,7 @@ num_engines = 2  # Number of engines
 mass = 16500
 
 # Step 2: Adjust the cruise distance based on the total desired distance
-total_flight_distance = 250 * 1000  # Example total flight distance in meters
+total_flight_distance = 150 * 1000  # Example total flight distance in meters
 target = 12000
 # Parameters for the engine turn-on phase
 engine_turn_on_params = {
@@ -813,31 +813,31 @@ take_off_C_params = {
 }
 
 # Parameters for the climb phase (single long climb)
-climb_params = {
-    'initial_altitude': 50,  # in feet
-    'target_altitude': target,  # in feet
-    'initial_airspeed': 120,  # in knots
-    'final_airspeed': 200,  # in knots
-    'initial_roc': ROC1,  # initial rate of climb in feet per minute
-    'final_roc': ROC2,  # final rate of climb in feet per minute
-    'initial_weight': None,  # in kg, to be updated based on the end of previous phase
-    'time_step': 1,  # in seconds
-    'C_D0': C_D0,
-    'k': k,
-    'S': S,
-    'num_motors': num_motors,
-    'num_engines': num_engines,
-    'gearbox_efficiency': gearbox_efficiency,
-    'inverter_efficiency': inverter_efficiency,
-    'battery_capacity_kWh': battery_capacity_kWh,
-    'usable_capacity_factor': usable_capacity_factor,
-    'steady_state_motor_power_kW': steady_state_motor_power_kW,
-    'max_power_kw': max_power_kw,
-    'idle_power_kw': idle_power_kw,
-    'propeller_efficiency': propeller_efficiency_C,
-    'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0.15
-}
+# climb_params = {
+#     'initial_altitude': 50,  # in feet
+#     'target_altitude': target,  # in feet
+#     'initial_airspeed': 120,  # in knots
+#     'final_airspeed': 200,  # in knots
+#     'initial_roc': ROC1,  # initial rate of climb in feet per minute
+#     'final_roc': ROC2,  # final rate of climb in feet per minute
+#     'initial_weight': None,  # in kg, to be updated based on the end of previous phase
+#     'time_step': 1,  # in seconds
+#     'C_D0': C_D0,
+#     'k': k,
+#     'S': S,
+#     'num_motors': num_motors,
+#     'num_engines': num_engines,
+#     'gearbox_efficiency': gearbox_efficiency,
+#     'inverter_efficiency': inverter_efficiency,
+#     'battery_capacity_kWh': battery_capacity_kWh,
+#     'usable_capacity_factor': usable_capacity_factor,
+#     'steady_state_motor_power_kW': steady_state_motor_power_kW,
+#     'max_power_kw': max_power_kw,
+#     'idle_power_kw': idle_power_kw,
+#     'propeller_efficiency': propeller_efficiency_C,
+#     'max_motor_power_kW': steady_state_motor_power_kW,
+#     'DOH': 0.5
+# }
 
 # Parameters for the climb phase (single phase from 50ft to 24000ft)
 climb_phase_params = {
@@ -862,7 +862,7 @@ climb_phase_params = {
     'idle_power_kw': idle_power_kw,
     'propeller_efficiency': propeller_efficiency_C,
     'max_motor_power_kW': steady_state_motor_power_kW,
-    'DOH': 0
+    'DOH': 0.5
 }
 
 
@@ -949,7 +949,7 @@ taxi_params2 = {
 # Step 1: Calculate the total distance excluding the cruise phase
 total_distance_excluding_cruise = calculate_total_distance_excluding_cruise(
     engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, 
-    climb_params, descent_params, approach_and_landing_params, taxi_params2
+    climb_phase_params, descent_params, approach_and_landing_params, taxi_params2
 )
 
 # Step 2: Adjust the cruise distance based on the total desired distance
