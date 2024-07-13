@@ -736,11 +736,11 @@ num_motors = 2  # Number of electric motors
 num_engines = 2  # Number of engines
 
 # Get user input for aircraft mass
-mass = 15000
+mass = 16500
 
 # Step 2: Adjust the cruise distance based on the total desired distance
-total_flight_distance = 200 * 1000  # Example total flight distance in meters
-target = 12500
+total_flight_distance = 1000 * 1000  # Example total flight distance in meters
+Crusing_alitiude = 24000
 # Parameters for the engine turn-on phase
 engine_turn_on_params = {
     'idle_power_kw': idle_power_kw,
@@ -791,11 +791,11 @@ takeoff_params = {
 take_off_C_params = {
     'initial_altitude': 0,  # in feet
     'target_altitude': 50,  # in feet
-    'initial_airspeed': 120,  # in knots
-    'final_airspeed': 125,  # in knots
+    'initial_airspeed': 111,  # in knots
+    'final_airspeed': 120,  # in knots
     'roc': 1800,  # rate of climb in feet per minute
     'initial_weight': None,  # in kg, to be updated based on the end of takeoff phase
-    'time_step': 1,  # in seconds
+    'time_step': 0.1,  # in seconds
     'C_D0': C_D0,
     'k': k,
     'S': S,
@@ -842,8 +842,8 @@ take_off_C_params = {
 # Parameters for the climb phase (single phase from 50ft to 24000ft)
 climb_phase_params = {
     'initial_altitude': 50,  # in feet
-    'target_altitude': target,  # in feet
-    'initial_airspeed': 125,  # in knots
+    'target_altitude': Crusing_alitiude,  # in feet
+    'initial_airspeed': 120,  # in knots
     'final_airspeed': 250,  # in knots
     'initial_roc': 1800,  # initial rate of climb in feet per minute
     'final_roc': 1000,  # final rate of climb in feet per minute
@@ -868,7 +868,7 @@ climb_phase_params = {
 
 # Parameters for the cruise phase
 cruise_params = {
-    'initial_altitude': target,  # in feet
+    'initial_altitude': Crusing_alitiude,  # in feet
     'initial_airspeed': 250,  # in knots
     'final_airspeed': 250,  # in knots
     'acceleration_duration': 180,  # in seconds 
@@ -893,7 +893,7 @@ cruise_params = {
 
 # Parameters for the descent phase
 descent_params = {
-    'initial_altitude': target,  # in feet
+    'initial_altitude': Crusing_alitiude,  # in feet
     'target_altitude': 10000,  # in feet
     'airspeed': 250,  # in knots
     'rate_of_descent': 1500,  # in feet per minute
@@ -967,7 +967,7 @@ combined_results = run_all_phases(
 )
 
 # Print and plot results
-print_totals(combined_results)
+#print_totals(combined_results)
 combined_results.to_csv('combined_results.csv', index=False)
-plot_results(combined_results)
+#plot_results(combined_results)
 print(f'cruise distance {cruise_distance}')

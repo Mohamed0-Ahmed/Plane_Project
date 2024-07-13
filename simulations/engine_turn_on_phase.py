@@ -64,8 +64,12 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
         total_co_emissions += metrics_engine['co_emissions_kg_total']
         total_nox_emissions += metrics_engine['nox_emissions_kg_total']
         total_so2_emissions += metrics_engine['so2_emissions_kg_total']
-
+        cumulative_carbon_emissions=total_carbon_emissions
+        cumulative_co_emissions=total_co_emissions
+        cumulative_nox_emissions=total_nox_emissions
+        cumulative_so2_emissions=total_so2_emissions
         fuel_consumptions.append(current_fuel_consumed)
+        cumulative_fuel_consumptions = fuel_consumptions
         dynamic_weights.append(initial_weight - cumulative_fuel_consumed * 9.81)  # Update weight based on fuel consumption
 
     results = pd.DataFrame({
@@ -74,6 +78,7 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
         'Altitude (m)': altitudes,
         'Velocity (m/s)': velocities,
         'Total Power (W)': total_powers,
+        'Cumulative Fuel Consumption (kg)': cumulative_fuel_consumptions,
         'Fuel Consumption (kg)': fuel_consumptions,
         'Dynamic Weight (N)': dynamic_weights,
         'Carbon Emissions (kg)': total_carbon_emissions,
@@ -82,7 +87,11 @@ def engine_turn_on_phase(params, initial_time, initial_horizontal_distance, num_
         'SO2 Emissions (kg)': total_so2_emissions,
         'Pressure (Pa)': pressures,
         'True Airspeed (m/s)': true_airspeeds,
-        'Groundspeed (m/s)': groundspeeds
+        'Groundspeed (m/s)': groundspeeds,
+        'Cumulative Carbon Emissions (kg)': cumulative_carbon_emissions,
+        'Cumulative CO Emissions (kg)': cumulative_co_emissions,
+        'Cumulative NOx Emissions (kg)': cumulative_nox_emissions,
+        'Cumulative SO2 Emissions (kg)': cumulative_so2_emissions
     })
 
     # # Plot results for checking

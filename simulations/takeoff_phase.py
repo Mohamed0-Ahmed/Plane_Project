@@ -394,6 +394,7 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     times = []
     altitudes = []
     distances = []
+    pressures = []
     velocities = []
     accelerations = []
     total_powers = []
@@ -413,6 +414,7 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     cumulative_battery_energy_list = []
     angles = []
     weights = []
+    isa = atmospheres.Atmosphere()
 
     print(f"Starting warm-up phase with initial weight {initial_weight} kg")
 
@@ -446,6 +448,8 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
         # Append current values to the lists
         times.append(time)
         altitudes.append(altitude)
+        rho = isa.airdens_kgpm3(altitude)
+        pressure = isa.airpress_pa(altitude)
         distances.append(distance)
         velocities.append(velocity)
         accelerations.append(0)
@@ -466,7 +470,7 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
         cumulative_battery_energy_list.append(cumulative_battery_energy_consumed)
         angles.append(initial_angle)
         weights.append(W - cumulative_fuel_consumed * 9.81)
-
+        pressures.append(pressure)
         time += time_step
 
     print("Completed warm-up phase. Starting takeoff roll phase.")
@@ -527,6 +531,8 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
         altitudes.append(altitude)
         distances.append(distance)
         velocities.append(velocity)
+        rho = isa.airdens_kgpm3(altitude)
+        pressure = isa.airpress_pa(altitude)
         accelerations.append(a)
         total_powers.append(power_required)
         engine_powers.append(engine_power_per * 2 * 1000)  # Convert kW to W
@@ -545,7 +551,7 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
         cumulative_battery_energy_list.append(cumulative_battery_energy_consumed)
         angles.append(angle)
         weights.append(W - cumulative_fuel_consumed * 9.81)
-
+        pressures.append(pressure)
         time += time_step
 
     # Calculate the number of batteries required
@@ -554,7 +560,9 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
     results = pd.DataFrame({
         'Time (s)': times,
         'Altitude (m)': altitudes,
-        'Distance (m)': distances,
+        'Pressure (Pa)': pressures,
+        'Horizontal Distance (m)': distances,
+        'Distance (m)': distances, 
         'True Airspeed (m/s)': velocities,
         'Groundspeed (m/s)': velocities,  # Assuming groundspeed is the same as airspeed in this simplified case
         'Acceleration (m/s^2)': accelerations,
@@ -640,6 +648,108 @@ def simulate_takeoff_phase(params, wind_speed_scenario, crosswind_speed_scenario
 
     # plt.tight_layout()
     # plt.show()
+    # # Plot additional figures
+
+    # # 2x2 plot: Velocity over time, Power over time, Acceleration, Distance covered
+    # plt.figure(figsize=(14, 8))
+
+    # plt.subplot(2, 2, 1)
+    # plt.plot(results['Time (s)'], results['True Airspeed (m/s)'], label='True Airspeed')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('True Airspeed (m/s)')
+    # plt.title('True Airspeed over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.subplot(2, 2, 2)
+    # plt.plot(results['Time (s)'], results['Total Power (W)'], label='Total Power', color='green')
+    # plt.plot(results['Time (s)'], results['Engine Power (W)'], label='Engine Power', color='blue')
+    # plt.plot(results['Time (s)'], results['Motor Power (W)'], label='Motor Power', color='purple')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Power (W)')
+    # plt.title('Power over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.subplot(2, 2, 3)
+    # plt.plot(results['Time (s)'], results['Acceleration (m/s^2)'], label='Acceleration', color='red')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Acceleration (m/s^2)')
+    # plt.title('Acceleration over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.subplot(2, 2, 4)
+    # plt.plot(results['Time (s)'], results['Distance (m)'], label='Distance', color='orange')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Distance (m)')
+    # plt.title('Distance over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.tight_layout()
+    # plt.show()
+
+    # # 2x1 plot: Fuel consumed, Total emissions (bar graph with values above them)
+    # plt.figure(figsize=(14, 6))
+
+    # plt.subplot(1, 2, 1)
+    # plt.plot(results['Time (s)'], results['Cumulative Fuel Consumption (kg)'], label='Cumulative Fuel Consumption', color='red')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Cumulative Fuel Consumption (kg)')
+    # plt.title('Cumulative Fuel Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.subplot(1, 2, 2)
+    # emissions = ['Carbon Emissions (kg)', 'CO Emissions (kg)', 'NOx Emissions (kg)', 'SO2 Emissions (kg)']
+    # emission_values = [results[emission].iloc[-1] for emission in emissions]
+    # plt.bar(emissions, emission_values, color=['black', 'grey', 'blue', 'purple'])
+    # for i, value in enumerate(emission_values):
+    #     plt.text(i, value + 0.05, f'{value:.2f}', ha='center')
+    # plt.ylabel('Total Emissions (kg)')
+    # plt.title('Total Emissions at the End of the Phase')
+    # plt.grid(True)
+
+    # plt.tight_layout()
+    # plt.show()
+
+    # # 2x1 plot: Battery parameters
+    # plt.figure(figsize=(14, 6))
+
+    # plt.subplot(1, 2, 1)
+    # plt.plot(results['Time (s)'], results['Battery Energy Consumption (kWh)'], label='Battery Energy Consumption', color='purple')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Battery Energy Consumption (kWh)')
+    # plt.title('Battery Energy Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.subplot(1, 2, 2)
+    # plt.plot(results['Time (s)'], results['Cumulative Battery Energy Consumption (kWh)'], label='Cumulative Battery Energy Consumption', color='brown')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Cumulative Battery Energy Consumption (kWh)')
+    # plt.title('Cumulative Battery Energy Consumption over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.tight_layout()
+    # plt.show()
+
+    # # Graph for the angle of attack
+    # plt.figure(figsize=(7, 6))
+
+    # plt.plot(results['Time (s)'], results['Climb Angle (degrees)'], label='Climb Angle', color='magenta')
+    # plt.xlabel('Time (s)')
+    # plt.ylabel('Climb Angle (degrees)')
+    # plt.title('Climb Angle over Time')
+    # plt.legend()
+    # plt.grid(True)
+
+    # plt.tight_layout()
+    # plt.show()
+
+        
 
     return results, weights[-1], time, distance, cumulative_battery_energy_consumed, total_powers, cumulative_fuel_consumed, total_carbon_emissions, total_co_emissions, total_nox_emissions, total_so2_emissions, required_batteries
 

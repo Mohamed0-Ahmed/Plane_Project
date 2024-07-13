@@ -870,6 +870,7 @@ from simulations.descent_phase import simulate_descent_phase
 from simulations.approach_and_landing_phase import simulate_approach_and_landing
 from simulations.engine_turn_on_phase import engine_turn_on_phase
 from utils import simple_wind_speed_scenario, simple_crosswind_speed_scenario
+from prints_and_plots import plot_results, print_totals
 
 def calculate_total_distance_excluding_cruise(engine_turn_on_params, taxi_params, takeoff_params, take_off_C_params, climb_params, descent_params, approach_and_landing_params, taxi_params2, num_engines=2):
     # Run the engine turn-on phase
@@ -1216,4 +1217,10 @@ def run_all_phases(engine_turn_on_params, taxi_params, takeoff_params, take_off_
     take_off_full_results = pd.concat([results_takeoff, results_take_off_C])
     climb_full_results = pd.concat([results_climb])
 
+    # plot_results(turn_on_results)
+    #print_totals(turn_on_results)
+    # plot_results(take_off_full_results)
+    # print_totals(take_off_full_results)
+    plot_results(climb_full_results)
+    print_totals(climb_full_results)
     return combined_results
